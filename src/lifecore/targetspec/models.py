@@ -8,10 +8,11 @@ concrete object types (Spaceship, Oscillator, StillLife, stubs) are added in 2.2
 
 from __future__ import annotations
 
+from collections.abc import Iterator
 from enum import StrEnum
 from typing import Any
 
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, model_validator
 
 from lifecore.targetspec.hashing import spec_id_for
 
@@ -33,8 +34,10 @@ class SymmetryClass(StrEnum):
     GLIDE_REFLECT = "glide_reflect"
 
 
-# kind value -> concrete TargetSpec subclass, for YAML reconstruction.
-_REGISTRY: dict[str, type[TargetSpec]] = {}
+class SlopeClass(StrEnum):
+    ORTHOGONAL = "orthogonal"
+    DIAGONAL = "diagonal"
+    OBLIQUE = "oblique"
 
 
 class TargetSpec(BaseModel):
@@ -45,15 +48,6 @@ class TargetSpec(BaseModel):
     rule: str = "B3/S23"
     kind: SpecKind
     notes: str = ""
-
-    def __init_subclass__(cls, **kwargs: Any) -> None:
-        super().__init_subclass__(**kwargs)
-        # Register concrete subclasses by the default value of their `kind` field.
-        field = cls.model_fields.get("kind")
-        if field is not None and field.default is not None:
-            default = field.default
-            value = default.value if isinstance(default, SpecKind) else str(default)
-            _REGISTRY[value] = cls
 
     def canonical_payload(self) -> dict[str, Any]:
         """JSON-able dict used for hashing and serialization (enums→values, tuples→lists)."""
@@ -68,10 +62,97 @@ class TargetSpec(BaseModel):
         return self.model_copy(deep=True)
 
 
+def _iter_subclasses(cls: type[TargetSpec]) -> Iterator[type[TargetSpec]]:
+    for sub in cls.__subclasses__():
+        yield sub
+        yield from _iter_subclasses(sub)
+
+
 def spec_class_for(kind: str | SpecKind) -> type[TargetSpec]:
-    """Look up the concrete spec class registered for ``kind``."""
+    """Find the concrete TargetSpec subclass whose default ``kind`` matches ``kind``.
+
+    Resolved lazily over the subclass tree (definition order), so library types take
+    precedence over test doubles that may share a kind.
+    """
     value = kind.value if isinstance(kind, SpecKind) else str(kind)
-    try:
-        return _REGISTRY[value]
-    except KeyError as exc:
-        raise KeyError(f"no TargetSpec class registered for kind {value!r}") from exc
+    for sub in _iter_subclasses(TargetSpec):
+        field = sub.model_fields.get("kind")
+        if field is None or field.default is None:
+            continue
+        default = field.default
+        sub_value = default.value if isinstance(default, SpecKind) else str(default)
+        if sub_value == value:
+            return sub
+    raise KeyError(f"no TargetSpec class registered for kind {value!r}")
+
+
+def _speed_fraction(distance: int, period: int) -> str:
+    """Format a sub-lightspeed fraction of c, e.g. (2, 4) -> 'c/2', (3, 4) -> '3c/4'."""
+    from math import gcd
+
+    g = gcd(distance, period)
+    num, den = distance // g, period // g
+    return "c" if den == 1 else (f"c/{den}" if num == 1 else f"{num}c/{den}")
+
+
+class Spaceship(TargetSpec):
+    """A translating periodic pattern (SPEC §4.1).
+
+    ``population_range`` and ``bbox_max`` are **post-hoc filters**, never engine
+    inputs — engines ignore them; they only gate acceptance after a candidate is
+    found. ``search_width`` is the dominant cost lever and the real engine input.
+    """
+
+    kind: SpecKind = SpecKind.SPACESHIP
+    displacement: tuple[int, int]
+    period: int
+    symmetry_class: SymmetryClass
+    search_width: tuple[int, int]  # (w_min, w_max)
+    population_range: tuple[int, int] | None = None  # post-hoc filter
+    bbox_max: tuple[int, int] | None = None  # post-hoc filter
+
+    @model_validator(mode="after")
+    def _validate(self) -> Spaceship:
+        dx, dy = abs(self.displacement[0]), abs(self.displacement[1])
+        if self.period < 1:
+            raise ValueError("period must be >= 1")
+        if dx == 0 and dy == 0:
+            raise ValueError("displacement (0,0) is an oscillator, not a spaceship")
+        if max(dx, dy) > self.period:
+            raise ValueError(
+                f"displacement {self.displacement} over period {self.period} exceeds lightspeed"
+            )
+        w_min, w_max = self.search_width
+        if w_min < 1:
+            raise ValueError("search_width minimum must be >= 1")
+        if w_min > w_max:
+            raise ValueError(f"search_width inverted: w_min={w_min} > w_max={w_max}")
+        return self
+
+    @property
+    def slope(self) -> SlopeClass:
+        dx, dy = abs(self.displacement[0]), abs(self.displacement[1])
+        if dx == 0 or dy == 0:
+            return SlopeClass.ORTHOGONAL
+        if dx == dy:
+            return SlopeClass.DIAGONAL
+        return SlopeClass.OBLIQUE
+
+    @property
+    def velocity(self) -> str:
+        dx, dy = abs(self.displacement[0]), abs(self.displacement[1])
+        slope = self.slope
+        if slope is SlopeClass.OBLIQUE:
+            return f"({dx},{dy})c/{self.period} oblique"
+        return f"{_speed_fraction(max(dx, dy), self.period)} {slope.value}"
+
+    def engine_params(self) -> dict[str, Any]:
+        """ONLY the mechanism inputs an engine consumes — never the post-hoc filters."""
+        return {
+            "rule": self.rule,
+            "displacement": self.displacement,
+            "period": self.period,
+            "symmetry_class": self.symmetry_class.value,
+            "search_width": self.search_width,
+            "slope": self.slope.value,
+        }
