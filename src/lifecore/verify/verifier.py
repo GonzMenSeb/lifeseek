@@ -12,12 +12,15 @@ from __future__ import annotations
 
 from lifecore.sim import reference
 from lifecore.sim.pattern import Cell, Pattern
-from lifecore.targetspec.models import Oscillator, Spaceship, TargetSpec
+from lifecore.targetspec.models import Oscillator, Spaceship, StillLife, TargetSpec
 from lifecore.verify.records import (
+    OrphanWitness,
     Verdict,
     VerificationRecord,
     reference_sim_version_hash,
 )
+
+GOE_MIN_PADDING = 4  # SPEC §5.2: orphan witness needs a forced-dead border of thickness >= 4
 
 
 def _minimal_translate_period(
@@ -81,6 +84,7 @@ def _verify_spaceship(
         spec_id=spec.spec_id,
         rule=spec.rule,
         verdict=Verdict.PASS if passed else Verdict.REJECT,
+        claim="spaceship",
         claimed_period=p,
         observed_period=observed_period,
         claimed_displacement=(dx, dy),
@@ -172,6 +176,7 @@ def _verify_oscillator(
         spec_id=spec.spec_id,
         rule=spec.rule,
         verdict=Verdict.PASS if passed else Verdict.REJECT,
+        claim="oscillator",
         claimed_period=p,
         observed_period=observed_period,
         claimed_displacement=(0, 0),
@@ -189,6 +194,94 @@ def _verify_oscillator(
     return record.signed()
 
 
+def _verify_stilllife(
+    candidate: Pattern, spec: StillLife, producer_engine_version_hash: str | None
+) -> VerificationRecord:
+    nxt = reference.step(candidate, 1)
+    residual = len(nxt.cells ^ candidate.cells)
+    stable = residual == 0 and not candidate.is_empty
+
+    notes = []
+    if candidate.is_empty:
+        notes.append("empty candidate")
+    if residual != 0:
+        notes.append(f"not stable: {residual} cells change after one generation")
+
+    spec_met = stable
+    if spec.bbox_max is not None and not candidate.is_empty:
+        w_max, h_max = spec.bbox_max
+        if candidate.width > w_max or candidate.height > h_max:
+            spec_met = False
+            notes.append(f"bbox {(candidate.width, candidate.height)} exceeds bbox_max {spec.bbox_max}")
+    if spec.population_range is not None:
+        lo, hi = spec.population_range
+        if not (lo <= candidate.population <= hi):  # post-hoc filter
+            spec_met = False
+            notes.append(f"population {candidate.population} outside range {spec.population_range}")
+
+    record = VerificationRecord(
+        spec_id=spec.spec_id,
+        rule=spec.rule,
+        verdict=Verdict.PASS if spec_met else Verdict.REJECT,
+        claim="still_life",
+        claimed_period=1,
+        observed_period=1 if stable else None,
+        claimed_displacement=(0, 0),
+        observed_displacement=(0, 0) if stable else None,
+        residual_cell_count=residual,
+        field_size=(candidate.width, candidate.height),
+        margin=candidate.width + candidate.height,
+        t_settle=0,
+        reference_sim_version_hash=reference_sim_version_hash(),
+        producer_engine_version_hash=producer_engine_version_hash,
+        notes="; ".join(notes),
+    )
+    return record.signed()
+
+
+def verify_nonexistence(
+    witness: OrphanWitness | None,
+    rule: str,
+    spec_id: str = "",
+    producer_engine_version_hash: str | None = None,
+) -> VerificationRecord:
+    """Verify a Garden-of-Eden / 'no such object' claim (SPEC §5.2).
+
+    A non-existence verdict is granted ONLY with an orphan witness carrying an
+    exhaustive no-preimage proof and a forced-dead border of thickness >= 4. A missing
+    witness or a single small-box UNSAT is REJECTED — never silently treated as proof.
+    """
+    notes = []
+    if witness is None:
+        notes.append("no orphan witness — cannot establish non-existence from absence of a find")
+        established = False
+    else:
+        established = (
+            witness.no_preimage_proof
+            and witness.padding_thickness >= GOE_MIN_PADDING
+            and not witness.orphan.is_empty
+        )
+        if not witness.no_preimage_proof:
+            notes.append("no exhaustive no-preimage proof (small-box UNSAT is insufficient)")
+        if witness.padding_thickness < GOE_MIN_PADDING:
+            notes.append(
+                f"padding thickness {witness.padding_thickness} < required {GOE_MIN_PADDING}"
+            )
+        if witness.orphan.is_empty:
+            notes.append("empty orphan")
+
+    record = VerificationRecord(
+        spec_id=spec_id,
+        rule=rule,
+        verdict=Verdict.PASS if established else Verdict.REJECT,
+        claim="nonexistence",
+        reference_sim_version_hash=reference_sim_version_hash(),
+        producer_engine_version_hash=producer_engine_version_hash,
+        notes="; ".join(notes) or "orphan witness validated",
+    )
+    return record.signed()
+
+
 def verify(
     candidate: Pattern,
     spec: TargetSpec,
@@ -201,4 +294,6 @@ def verify(
         return _verify_spaceship(candidate, spec, producer_engine_version_hash)
     if isinstance(spec, Oscillator):
         return _verify_oscillator(candidate, spec, producer_engine_version_hash)
+    if isinstance(spec, StillLife):
+        return _verify_stilllife(candidate, spec, producer_engine_version_hash)
     raise NotImplementedError(f"verification not implemented for spec kind {spec.kind!r}")

@@ -9,17 +9,36 @@ later replay can prove bitwise identity. No mutation API.
 from __future__ import annotations
 
 import hashlib
+from dataclasses import dataclass, field
 from enum import StrEnum
 from pathlib import Path
 
 from pydantic import BaseModel, ConfigDict
 
+from lifecore.sim.pattern import Pattern
 from lifecore.targetspec.hashing import canonical_json
 
 
 class Verdict(StrEnum):
     PASS = "PASS"
     REJECT = "REJECT"
+
+
+@dataclass(frozen=True)
+class OrphanWitness:
+    """Evidence for a Garden-of-Eden / non-existence claim (SPEC §5.2).
+
+    A genuine non-existence verdict requires an orphan (parentless configuration)
+    established by an *exhaustive* SAT preimage search with a sufficiently thick
+    forced-dead border (thickness >= 4) — never a single small-box UNSAT. The
+    ``no_preimage_proof`` flag is the SAT certificate produced by LLS (Phase 6),
+    independently replayable; this module enforces the surrounding protocol.
+    """
+
+    orphan: Pattern
+    padding_thickness: int
+    no_preimage_proof: bool
+    source: str = field(default="")
 
 
 def reference_sim_version_hash() -> str:
@@ -38,6 +57,7 @@ class VerificationRecord(BaseModel):
     spec_id: str
     rule: str
     verdict: Verdict
+    claim: str | None = None  # what was verified: spaceship | oscillator | still_life | nonexistence
     claimed_period: int | None = None
     observed_period: int | None = None
     claimed_displacement: tuple[int, int] | None = None
