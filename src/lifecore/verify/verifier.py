@@ -11,8 +11,8 @@ debris/clipping loopholes), and confirms the TRUE minimal period (kills trivial-
 from __future__ import annotations
 
 from lifecore.sim import reference
-from lifecore.sim.pattern import Pattern
-from lifecore.targetspec.models import Spaceship, TargetSpec
+from lifecore.sim.pattern import Cell, Pattern
+from lifecore.targetspec.models import Oscillator, Spaceship, TargetSpec
 from lifecore.verify.records import (
     Verdict,
     VerificationRecord,
@@ -96,6 +96,99 @@ def _verify_spaceship(
     return record.signed()
 
 
+def _minimal_stationary_period(candidate: Pattern, max_period: int) -> int | None:
+    """Smallest q with step(candidate, q) == candidate exactly (stationary recurrence)."""
+    for q in range(1, max_period + 1):
+        if reference.step(candidate, q).cells == candidate.cells:
+            return q
+    return None
+
+
+def _phase_cells(candidate: Pattern, period: int) -> list[frozenset[Cell]]:
+    return [reference.step(candidate, i).cells for i in range(period)]
+
+
+def _has_full_period_cell(phases: list[frozenset[Cell]], period: int) -> bool:
+    """True iff some cell's on/off sequence has minimal cyclic period exactly ``period``.
+
+    This is the true-period guarantee: it rejects a 'period p' that is merely the LCM of
+    separable sub-oscillators, where every cell's individual period is a proper divisor of p.
+    """
+    proper_divisors = [d for d in range(1, period) if period % d == 0]
+    union: set[Cell] = set().union(*phases) if phases else set()
+    for cell in union:
+        vec = [cell in ph for ph in phases]
+        is_full = not any(
+            all(vec[k] == vec[(k + d) % period] for k in range(period)) for d in proper_divisors
+        )
+        if is_full:
+            return True
+    return False
+
+
+def _verify_oscillator(
+    candidate: Pattern, spec: Oscillator, producer_engine_version_hash: str | None
+) -> VerificationRecord:
+    p = spec.period
+    horizon = max(2 * p, p + 4)
+
+    observed_period = _minimal_stationary_period(candidate, horizon)
+    moved = reference.step(candidate, p)
+    residual = len(moved.cells ^ candidate.cells)  # oscillator displacement is (0,0)
+
+    phases = _phase_cells(candidate, p) if not candidate.is_empty else []
+    stator = set(phases[0]).intersection(*phases) if phases else set()
+    union: set[Cell] = set().union(*phases) if phases else set()
+    rotor = union - stator
+    genuine_full_period = not candidate.is_empty and _has_full_period_cell(phases, p)
+    two_period_ok = reference.step(candidate, 2 * p).cells == candidate.cells
+
+    passed = (
+        residual == 0
+        and observed_period == p
+        and genuine_full_period
+        and two_period_ok
+        and not candidate.is_empty
+    )
+
+    notes = []
+    if candidate.is_empty:
+        notes.append("empty candidate")
+    if residual != 0:
+        notes.append(f"non-empty residual ({residual}) — not stationary at period {p}")
+    if observed_period is None:
+        notes.append("no stationary recurrence within horizon (not an oscillator)")
+    elif observed_period != p:
+        notes.append(f"true minimal period is {observed_period}, not claimed {p}")
+    if observed_period == p and not genuine_full_period:
+        notes.append(
+            f"no single cell oscillates at the full claimed period {p} "
+            "(trivial LCM of separable sub-oscillators)"
+        )
+    if not two_period_ok:
+        notes.append("failed >=2-period recurrence confirmation")
+
+    record = VerificationRecord(
+        spec_id=spec.spec_id,
+        rule=spec.rule,
+        verdict=Verdict.PASS if passed else Verdict.REJECT,
+        claimed_period=p,
+        observed_period=observed_period,
+        claimed_displacement=(0, 0),
+        observed_displacement=(0, 0) if observed_period is not None else None,
+        residual_cell_count=residual,
+        rotor_cell_count=len(rotor),
+        stator_cell_count=len(stator),
+        field_size=(candidate.width, candidate.height),
+        margin=candidate.width + candidate.height,
+        t_settle=0,
+        reference_sim_version_hash=reference_sim_version_hash(),
+        producer_engine_version_hash=producer_engine_version_hash,
+        notes="; ".join(notes),
+    )
+    return record.signed()
+
+
 def verify(
     candidate: Pattern,
     spec: TargetSpec,
@@ -106,4 +199,6 @@ def verify(
         candidate = candidate.with_rule(spec.rule)
     if isinstance(spec, Spaceship):
         return _verify_spaceship(candidate, spec, producer_engine_version_hash)
+    if isinstance(spec, Oscillator):
+        return _verify_oscillator(candidate, spec, producer_engine_version_hash)
     raise NotImplementedError(f"verification not implemented for spec kind {spec.kind!r}")

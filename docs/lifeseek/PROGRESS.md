@@ -57,7 +57,7 @@
 
 ### Phase 3 — Verification gate (crown jewel)
 - [x] 3.1 (contract) universal closed-world verifier + record (reference path only) — commit: (this commit)
-- [ ] 3.2 ⟂A oscillator rotor/stator + true-period (reject trivial LCM) — commit: ______
+- [x] 3.2 ⟂A oscillator rotor/stator + true-period (reject trivial LCM) — commit: (this commit)
 - [ ] 3.3 ⟂B still-life stability + rigorous GoE (orphan witness) — commit: ______
 - [ ] 3.4 (integration) acceptance gate + adversarial golden suite **(release blocker)** — commit: ______
 

@@ -43,6 +43,8 @@ class VerificationRecord(BaseModel):
     claimed_displacement: tuple[int, int] | None = None
     observed_displacement: tuple[int, int] | None = None
     residual_cell_count: int = 0
+    rotor_cell_count: int | None = None
+    stator_cell_count: int | None = None
     field_size: tuple[int, int] | None = None
     margin: int = 0
     t_settle: int = 0
