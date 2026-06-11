@@ -76,7 +76,7 @@
 
 ### Phase 6 — Sandbox + engine adapters
 - [x] 6.1 (contract) EngineAdapter ABC — commit: (this commit)
-- [ ] 6.2 (contract) sandbox runner + fuzzed parsers — commit: ______
+- [x] 6.2 (contract) sandbox runner + fuzzed parsers — commit: (this commit)
 - [ ] 6.3 ⟂ qfind adapter (TIMEOUT≠UNSAT) — commit: ______
 - [ ] 6.4 ⟂ rlifesrc adapter — commit: ______
 - [ ] 6.5 ⟂ LLS adapter (SAT + GoE preimage) — commit: ______
