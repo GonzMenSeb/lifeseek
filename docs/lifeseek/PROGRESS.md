@@ -29,7 +29,7 @@
 ## Environment / invariants checklist (verify once, re-verify if they change)
 - [ ] `uv` env builds from `uv.lock`; `pytest`, `ruff`, `mypy` run clean.
 - [x] `python-lifelib` importable (lifelib extra, py3.12); engine binaries: Containerfile stubbed (Phase 6).
-- [~] **INVARIANT:** reference path verified lifelib-free via AST guard test (Phase 3 wires verifier.py).
+- [x] **INVARIANT:** verify/verifier.py imports sim/reference only; AST guard test green (lifelib-free).
 - [ ] **INVARIANT:** producer (lifelib) and verifier (numpy) share no simulation code; novelty uses an
       independent cross-check canonicalizer for accepted discoveries.
 - [ ] **INVARIANT:** spec/verifier/novelty/budget are read-only through the MCP bridge (no setters).
@@ -56,7 +56,7 @@
 - [x] 2.4 (integration) capability map (gun/oblique → no-capable-engine) — commit: (this commit)  **Phase 2 complete.**
 
 ### Phase 3 — Verification gate (crown jewel)
-- [ ] 3.1 (contract) universal closed-world verifier + record (reference path only) — commit: ______
+- [x] 3.1 (contract) universal closed-world verifier + record (reference path only) — commit: (this commit)
 - [ ] 3.2 ⟂A oscillator rotor/stator + true-period (reject trivial LCM) — commit: ______
 - [ ] 3.3 ⟂B still-life stability + rigorous GoE (orphan witness) — commit: ______
 - [ ] 3.4 (integration) acceptance gate + adversarial golden suite **(release blocker)** — commit: ______
