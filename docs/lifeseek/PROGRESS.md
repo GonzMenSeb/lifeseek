@@ -11,15 +11,16 @@
 ---
 
 ## ⮕ CURRENT POSITION
-**Phase 3 · Task 3.1 — universal closed-world verifier + record (contract).** Phase 2 complete & green.
+**Phase 4 · Task 4.1 — novelty canonical (apgcode + cross-check).** Phase 3 complete; gate live.
 
 ## HANDOFF NOTE (rewrite before every stop)
-- **Just did:** Phase 2 complete — base spec+hashing+yaml (2.1), spaceship (2.2), oscillator/stilllife/stubs
-  (2.3), capability map (2.4: oblique→ikpx2, gun/assembly→[]). Full suite green, ruff+mypy clean.
-- **Doing next:** Phase 3 Task 3.1 (contract) universal closed-world verifier on the REFERENCE path only +
-  signed VerificationRecord. CROWN JEWEL — trust-critical; implement carefully, AST-guard no lifelib.
-- **Half-done / careful:** 3.1 is the frozen contract for 3.2–3.4. Verifier must: empty-field embed w/ margin,
-  settle T_settle, exact-image-at-period, EMPTY-RESIDUAL assertion, TRUE minimal period (reject trivial LCM).
+- **Just did:** Phase 3 complete (crown jewel) — universal verifier (3.1), oscillator rotor/stator+true-period
+  (3.2), still-life+GoE (3.3), acceptance gate + adversarial golden suite (3.4). Also 4.0 NoveltyResult types
+  (pulled forward). Gate = PASS∧NOVEL, no setters. Full suite green.
+- **Doing next:** Phase 4 novelty oracle — 4.1 canonical (apgcode via lifelib + independent cross-check),
+  4.2 catagolue (frozen snapshot; network-fail→UNCERTAIN), 4.3 mdl, 4.4 symmetry suite (release blocker).
+- **Half-done / careful:** novelty canonical cross-check must be INDEPENDENT of lifelib for accepted set
+  (SPEC §6.1). Remember block apgcode is xs4_33 (doc said xs4_252).
 - **Resume command:** `cd <worktree> && uv run pytest -q && cat docs/lifeseek/PROGRESS.md && git log --oneline -8`
 - **Open questions for the human:** engine source SHAs (qfind/rlifesrc/LLS) still TODO-CONFIRM in
   tools/versions.lock — only needed for real Phase 6 engine builds, not the core.
@@ -59,10 +60,10 @@
 - [x] 3.1 (contract) universal closed-world verifier + record (reference path only) — commit: (this commit)
 - [x] 3.2 ⟂A oscillator rotor/stator + true-period (reject trivial LCM) — commit: (this commit)
 - [x] 3.3 ⟂B still-life stability + rigorous GoE (orphan witness) — commit: (this commit)
-- [ ] 3.4 (integration) acceptance gate + adversarial golden suite **(release blocker)** — commit: ______
+- [x] 3.4 (integration) acceptance gate + adversarial golden suite — commit: (this commit)  **Phase 3 complete (crown jewel).**
 
 ### Phase 4 — Novelty oracle (two-tier, fail-closed)
-- [ ] 4.0 (contract) NoveltyResult types — commit: ______
+- [x] 4.0 (contract) NoveltyResult types — commit: (3.4 commit; pulled forward to unblock gate)
 - [ ] 4.1 ⟂ canonical (apgcode + independent cross-check) — commit: ______
 - [ ] 4.2 ⟂ catagolue (frozen snapshot; network-fail → UNCERTAIN) — commit: ______
 - [ ] 4.3 ⟂ mdl/minimality (reject derivative-of-known) — commit: ______
@@ -146,4 +147,5 @@
 ## Session log (one line per work session: date · who · phase/tasks touched · ending commit)
 - 2026-06-11 · Claude (subagent-driven exec) · Phase 0 (0.1–0.3) scaffold/env/tracker · ending 9115794
 - 2026-06-11 · Claude (subagent-driven exec) · Phase 1 (1.1–1.4) sim bedrock + differential · ending e5dd2f9
-- 2026-06-11 · Claude (subagent-driven exec) · Phase 2 (2.1–2.4) targetspec + capability map · ending 1066b3f → (2.4 commit)
+- 2026-06-11 · Claude (subagent-driven exec) · Phase 2 (2.1–2.4) targetspec + capability map · ending db360f5
+- 2026-06-11 · Claude (subagent-driven exec) · Phase 3 (3.1–3.4)+4.0 verifier gate (crown jewel) · ending 9e554fa → (3.4 commit)
