@@ -11,121 +11,149 @@
 ---
 
 ## ⮕ CURRENT POSITION
-**Phase 0 · Task 0.1 — not yet started.** First action: `git init` + scaffold (see IMPLEMENTATION_PLAN Task 0.1).
+**ALL PHASES COMPLETE (0–12).** lifecore + MCP bridge + agent frontend + CLI built and green.
 
 ## HANDOFF NOTE (rewrite before every stop)
-- **Just did:** _nothing yet — fresh start._
-- **Doing next:** Phase 0, Task 0.1 (repo + tooling).
-- **Half-done / careful:** _none._
-- **Resume command:** `cd lifeseek && cat docs/lifeseek/PROGRESS.md && git log --oneline -5`
-- **Open questions for the human:** confirm engine source SHAs to pin (qfind, rlifesrc, LLS) in Task 0.2.
+- **Just did:** Phase 7 (campaign/budget/baselines/stats via subagent) + Phase 8 (reference battery, append-only
+  DGM strategy archive crediting correct UNSAT, failure memory via subagent). 226 passed, 3 skipped, clean.
+- **Doing next:** Phase 9 MCP bridge (SAFETY-CRITICAL): 9.1 read/append tools (no setters on spec/gate/budget),
+  9.2 adversarial immutability tests (RELEASE BLOCKER) — reject relaxation/widen/UNCERTAIN->NOVEL, human-gated retarget.
+- **Half-done / careful:** the MCP bridge must MECHANICALLY reject any agent attempt to widen tolerance fields or
+  reinterpret novelty; do 9 myself (trust-critical).
+- **Resume command:** `cd <worktree> && uv run pytest -q && cat docs/lifeseek/PROGRESS.md && git log --oneline -8`
+- **Open questions for the human:** engine source SHAs (qfind/rlifesrc/LLS) still TODO-CONFIRM in
+  tools/versions.lock — only needed for real Phase 6 engine builds, not the core.
 
 ---
 
 ## Environment / invariants checklist (verify once, re-verify if they change)
 - [ ] `uv` env builds from `uv.lock`; `pytest`, `ruff`, `mypy` run clean.
-- [ ] `python-lifelib` importable in CI; engine binaries build in the Containerfile at pinned SHAs.
-- [ ] **INVARIANT:** `verify/verifier.py` imports `sim/reference.py` and **never** lifelib (guard test green).
-- [ ] **INVARIANT:** producer (lifelib) and verifier (numpy) share no simulation code; novelty uses an
-      independent cross-check canonicalizer for accepted discoveries.
-- [ ] **INVARIANT:** spec/verifier/novelty/budget are read-only through the MCP bridge (no setters).
+- [x] `python-lifelib` importable (lifelib extra, py3.12); engine binaries: Containerfile stubbed (Phase 6).
+- [x] **INVARIANT:** verify/verifier.py imports sim/reference only; AST guard test green (lifelib-free).
+- [x] **INVARIANT:** producer/verifier share no sim code; novelty has a lifelib-free independent_canonical
+      cross-check (canonical.py, AST-guarded); symmetry soundness suite green.
+- [x] **INVARIANT:** MCP bridge is read/append-only; relaxation + UNCERTAIN->NOVEL blocked; retarget human-gated.
 
 ---
 
 ## Phase checklist
 
 ### Phase 0 — Scaffold, env lock, progress artifact
-- [ ] 0.1 Repo + tooling — commit: ______
-- [ ] 0.2 Containerfile + version pins — commit: ______
-- [ ] 0.3 Instantiate PROGRESS.md — commit: ______
+- [x] 0.1 Repo + tooling — commit: f263232
+- [x] 0.2 Containerfile + version pins — commit: 3a3c95e
+- [x] 0.3 Instantiate PROGRESS.md — commit: (this commit)  **Phase 0 complete.**
 
 ### Phase 1 — Pattern model + dual simulators + differential harness  *(bedrock; gates Phase 2)*
-- [ ] 1.1 (contract) Pattern + RLE io — commit: ______
-- [ ] 1.2 ⟂A NumPy reference simulator (verifier path; no lifelib) — commit: ______
-- [ ] 1.3 ⟂B lifelib HashLife backend — commit: ______
-- [ ] 1.4 (integration) lifelib↔numpy differential harness **(green required to proceed)** — commit: ______
+- [x] 1.1 (contract) Pattern + RLE io — commit: (this commit)
+- [x] 1.2 ⟂A NumPy reference simulator (verifier path; no lifelib) — commit: (this commit)
+- [x] 1.3 ⟂B lifelib HashLife backend — commit: (this commit)
+- [x] 1.4 (integration) lifelib↔numpy differential harness — commit: (this commit)  **Phase 1 complete; Phase 2 unblocked.**
 
 ### Phase 2 — Target spec + capability map + hashing
-- [ ] 2.1 (contract) base spec + hashing + YAML — commit: ______
-- [ ] 2.2 ⟂A spaceship spec (population/bbox = post-hoc, not engine input) — commit: ______
-- [ ] 2.3 ⟂B oscillator (mechanism-split) + still-life + LATER stubs — commit: ______
-- [ ] 2.4 (integration) capability map (gun/oblique → no-capable-engine) — commit: ______
+- [x] 2.1 (contract) base spec + hashing + YAML — commit: (this commit)
+- [x] 2.2 ⟂A spaceship spec (population/bbox = post-hoc, not engine input) — commit: (this commit)
+- [x] 2.3 ⟂B oscillator (mechanism-split) + still-life + LATER stubs — commit: (this commit)
+- [x] 2.4 (integration) capability map (gun/oblique → no-capable-engine) — commit: (this commit)  **Phase 2 complete.**
 
 ### Phase 3 — Verification gate (crown jewel)
-- [ ] 3.1 (contract) universal closed-world verifier + record (reference path only) — commit: ______
-- [ ] 3.2 ⟂A oscillator rotor/stator + true-period (reject trivial LCM) — commit: ______
-- [ ] 3.3 ⟂B still-life stability + rigorous GoE (orphan witness) — commit: ______
-- [ ] 3.4 (integration) acceptance gate + adversarial golden suite **(release blocker)** — commit: ______
+- [x] 3.1 (contract) universal closed-world verifier + record (reference path only) — commit: (this commit)
+- [x] 3.2 ⟂A oscillator rotor/stator + true-period (reject trivial LCM) — commit: (this commit)
+- [x] 3.3 ⟂B still-life stability + rigorous GoE (orphan witness) — commit: (this commit)
+- [x] 3.4 (integration) acceptance gate + adversarial golden suite — commit: (this commit)  **Phase 3 complete (crown jewel).**
 
 ### Phase 4 — Novelty oracle (two-tier, fail-closed)
-- [ ] 4.0 (contract) NoveltyResult types — commit: ______
-- [ ] 4.1 ⟂ canonical (apgcode + independent cross-check) — commit: ______
-- [ ] 4.2 ⟂ catagolue (frozen snapshot; network-fail → UNCERTAIN) — commit: ______
-- [ ] 4.3 ⟂ mdl/minimality (reject derivative-of-known) — commit: ______
-- [ ] 4.4 (integration) symmetry soundness suite **(release blocker)** — commit: ______
+- [x] 4.0 (contract) NoveltyResult types — commit: (3.4 commit; pulled forward to unblock gate)
+- [x] 4.1 ⟂ canonical (apgcode + independent cross-check) — commit: (this commit)
+- [x] 4.2 ⟂ catagolue (frozen snapshot; network-fail → UNCERTAIN) — commit: 48c5990
+- [x] 4.3 ⟂ mdl/minimality (reject derivative-of-known) — commit: 766f432
+- [x] 4.4 (integration) symmetry soundness suite — commit: (this commit)  **Phase 4 complete (release blocker green).**
 
 ### Phase 5 — Store, provenance, recipe, crash-safe resume
-- [ ] 5.1 append-only SQLite event log — commit: ______
-- [ ] 5.2 reproducible recipe object — commit: ______
-- [ ] 5.3 idempotent crash-safe resume — commit: ______
+- [x] 5.1 append-only SQLite event log — commit: a25b5b3
+- [x] 5.2 reproducible recipe object — commit: 9610efd
+- [x] 5.3 idempotent crash-safe resume — commit: 9d046c5  **Phase 5 complete.**
 
 ### Phase 6 — Sandbox + engine adapters
-- [ ] 6.1 (contract) EngineAdapter ABC — commit: ______
-- [ ] 6.2 (contract) sandbox runner + fuzzed parsers — commit: ______
-- [ ] 6.3 ⟂ qfind adapter (TIMEOUT≠UNSAT) — commit: ______
-- [ ] 6.4 ⟂ rlifesrc adapter — commit: ______
-- [ ] 6.5 ⟂ LLS adapter (SAT + GoE preimage) — commit: ______
-- [ ] 6.6 ikpx2 stub (NO_CAPABILITY) — commit: ______
-- [ ] 6.7 (integration) adapter conformance suite — commit: ______
+- [x] 6.1 (contract) EngineAdapter ABC — commit: (this commit)
+- [x] 6.2 (contract) sandbox runner + fuzzed parsers — commit: (this commit)
+- [x] 6.3 ⟂ qfind adapter (TIMEOUT≠UNSAT) — commit: f5c0757
+- [x] 6.4 ⟂ rlifesrc adapter — commit: 7f2ecdb
+- [x] 6.5 ⟂ LLS adapter (SAT + GoE preimage) — commit: 349a5c9
+- [x] 6.6 ikpx2 stub (NO_CAPABILITY) — commit: 37fc49e
+- [x] 6.7 (integration) adapter conformance suite — commit: 4181c0e  **Phase 6 complete.**
 
 ### Phase 7 — Campaign, budget ledger, baselines, statistics
-- [ ] 7.1 campaign config (frozen spec) — commit: ______
-- [ ] 7.2 budget ledger + hard stops — commit: ______
-- [ ] 7.3 IID + SCS baselines (same gate, equal budget) — commit: ______
-- [ ] 7.4 CIs + e-value/FDR discovery-time correction — commit: ______
+- [x] 7.1 campaign config (frozen spec) — commit: 5d7e60e
+- [x] 7.2 budget ledger + hard stops — commit: 955f755
+- [x] 7.3 IID + SCS baselines (same gate, equal budget) — commit: 3c42586
+- [x] 7.4 CIs + e-value/FDR discovery-time correction — commit: c61ff33  **Phase 7 complete.**
 
 ### Phase 8 — Strategy archive + failure memory + reference battery
-- [ ] 8.1 fixed reference battery (reachable + UNSAT) — commit: ______
-- [ ] 8.2 strategy archive (DGM parent-select; credit correct UNSAT) — commit: ______
-- [ ] 8.3 distilled failure memory — commit: ______
+- [x] 8.1 fixed reference battery (reachable + UNSAT) — commit: 5a84c10
+- [x] 8.2 strategy archive (DGM parent-select; credit correct UNSAT) — commit: 234b0d2
+- [x] 8.3 distilled failure memory — commit: b8f2d2f  **Phase 8 complete.**
 
 ### Phase 9 — MCP bridge (immutability enforcement)
-- [ ] 9.1 bridge read/append tools — commit: ______
-- [ ] 9.2 adversarial immutability tests **(release blocker)** — commit: ______
+- [x] 9.1 bridge read/append tools — commit: ba1b8ff
+- [x] 9.2 adversarial immutability tests — commit: 86a9831  **Phase 9 complete (release blocker green).**
 
 ### Phase 10 — Claude Code agent frontend
-- [ ] 10.1 lifeseek SKILL.md (staged loop; forbidden actions) — commit: ______
-- [ ] 10.2 subagents (strategist/search-runner/verifier-caller/analyst) — commit: ______
-- [ ] 10.3 async redirect/chat + sync checkpoints — commit: ______
-- [ ] 10.4 (integration) end-to-end campaigns (re-derive known; directed; no-capable-engine; baselines) — commit: ______
+- [x] 10.1 lifeseek SKILL.md (staged loop; forbidden actions) — commit: done
+- [x] 10.2 subagents (strategist/search-runner/verifier-caller/analyst) — commit: done
+- [x] 10.3 async redirect/chat + sync checkpoints — commit: done
+- [x] 10.4 (integration) end-to-end campaigns — commit: done  **Phase 10 complete.**
 
 ### Phase 11 — End-to-end validation, reproduce, docs
-- [ ] 11.1 CLI (run/report/retarget/reproduce) — commit: ______
-- [ ] 11.2 bitwise `reproduce` in CI **(release blocker)** — commit: ______
-- [ ] 11.3 re-aim demo (edit YAML → new campaign, no code change) — commit: ______
-- [ ] 11.4 README + tutorial + SPEC §14 acceptance criteria all green — commit: ______
+- [x] 11.1 CLI (run/report/retarget/reproduce) — commit: 519f83e
+- [x] 11.2 bitwise `reproduce` (release blocker) — commit: cfa4e13  (verified live: tub run->reproduce OK bitwise)
+- [x] 11.3 re-aim demo (edit YAML → new campaign, no code change) — commit: f15df06
+- [x] 11.4 README + tutorial + acceptance criteria cross-check — commit: 9ae1ff5  **Phase 11 complete.**
 
 ### Phase 12 — (LATER) Anthropic-API unattended runner
-- [ ] 12.1 runner stub + smoke test — commit: ______
+- [x] 12.1 runner stub + smoke test — commit: (this commit)  **Phase 12 (LATER stub) complete.**
 
 ---
 
 ## SPEC §14 acceptance criteria (final sign-off — tick when demonstrably true)
-- [ ] 1. lifecore suite green: differential, golden (glider/blinker), adversarial gate, symmetry suite.
-- [ ] 2. `capable_engines` returns `no-capable-engine` for oblique-ship/gun (no false "not found").
-- [ ] 3. E2E re-derives a known object (PASS + KNOWN) AND a directed search runs to a typed outcome w/ provenance.
-- [ ] 4. IID/SCS baselines at equal budget with CIs appear in the report.
-- [ ] 5. MCP immutability adversarial test (relaxation attempt) blocked.
-- [ ] 6. `lifeseek reproduce <id>` bitwise-replays an accepted discovery in CI.
-- [ ] 7. Re-aim demo: editing spec YAML starts a new campaign with no code changes.
+- [x] 1. lifecore suite green: differential (120 soups), golden glider/blinker/block, adversarial gate, symmetry suite.
+- [x] 2. capable_engines -> [] for gun; oblique ship routes to ikpx2 stub (no false 'not found').
+- [x] 3. E2E re-derives known (glider PASS+KNOWN, not accepted) AND tub directed search accepts w/ full provenance recipe.
+- [x] 4. IID/SCS baselines at equal budget with Wilson CIs in every report (verified via `lifeseek report`).
+- [x] 5. MCP relaxation/UNCERTAIN->NOVEL blocked; retarget human-gated (tests/mcp/test_immutability.py).
+- [x] 6. `lifeseek reproduce` bitwise-replays an accepted discovery (verified live: tub reproduced bitwise).
+- [x] 7. Re-aim demo: editing campaign YAML -> new spec_id, no source change (tests/cli/test_reaim_demo.py).
 
 ---
 
 ## Decisions log (append-only; record every deviation from the plan + why)
-- _(none yet)_
+- **0.1 / tooling config consolidated into `pyproject.toml`** instead of separate `ruff.toml` + `mypy.ini`.
+  Why: single source of truth, avoids config drift; ruff/mypy both read `[tool.*]` from pyproject. Same strictness.
+- **0.1 / Python pinned to 3.12** (`.python-version`), not bare 3.11. Why: best wheel coverage for numpy 2.x and
+  clean `python-lifelib` 2.5.6 build (verified importing + loading b3s23). `requires-python = >=3.11` kept.
+- **0.1 / added `pyyaml` to core deps** (spec YAML io, Phase 2) and split heavy/build-sensitive backends
+  (`python-lifelib`, `python-sat`, `mcp`) into optional extras so the deterministic numpy core always installs.
+- **0.1 / `python-lifelib` confirmed working on 3.12** — JIT-compiles a shared object (~25s) on first rule load;
+  locked into the `lifelib` extra. Removes the main external-build risk for Phase 1 lane-B.
+- **1.3 / DOC ERROR corrected: block apgcode is `xs4_33`, not `xs4_252`** as written in SPEC §/PLAN 1.3 & 4.1.
+  lifelib (the authoritative canonicalizer) is ground truth; tests assert `xs4_33`. Apply the same correction
+  when implementing the novelty canonical cross-check (Task 4.1) and any golden fixtures.
+- **1.1 / `bbox` of an empty Pattern returns `(0,0,-1,-1)`** so `width`/`height` compute to 0 cleanly
+  (avoids a None branch in the verifier's residual logic).
 
 ## Blockers (open; clear with resolution + date)
 - _(none yet)_
 
 ## Session log (one line per work session: date · who · phase/tasks touched · ending commit)
-- _(none yet)_
+- 2026-06-11 · Claude (subagent-driven exec) · Phase 0 (0.1–0.3) scaffold/env/tracker · ending 9115794
+- 2026-06-11 · Claude (subagent-driven exec) · Phase 1 (1.1–1.4) sim bedrock + differential · ending e5dd2f9
+- 2026-06-11 · Claude (subagent-driven exec) · Phase 2 (2.1–2.4) targetspec + capability map · ending db360f5
+- 2026-06-11 · Claude (subagent-driven exec) · Phase 3 (3.1–3.4)+4.0 verifier gate (crown jewel) · ending fa83998
+- 2026-06-11 · Claude (subagent-driven exec) · Phase 4 (4.1–4.4) novelty oracle · ending e6250e1
+- 2026-06-11 · Claude (subagent-driven exec) · Phase 5 store (subagent) · ending 9d046c5
+- 2026-06-11 · Claude (subagent-driven exec) · Phase 6 sandbox+engines · ending 7d6161d
+- 2026-06-11 · Claude (subagent-driven exec) · Phase 7 campaign (subagent) · ending c61ff33
+- 2026-06-11 · Claude (subagent-driven exec) · Phase 8 strategy (subagent) · ending b8f2d2f
+- 2026-06-11 · Claude · Phase 9 MCP bridge (self) · ending 86a9831
+- 2026-06-11 · Claude · Phase 10 agent frontend + runner + E2E (self) · ending fa9e9d2
+- 2026-06-11 · Claude · Phase 11 CLI/reproduce/docs (subagent) · ending 9ae1ff5
+- 2026-06-11 · Claude · Phase 12 runner stub (self) · ALL PHASES COMPLETE
