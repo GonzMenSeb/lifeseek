@@ -11,7 +11,7 @@
 ---
 
 ## ⮕ CURRENT POSITION
-**Phase 11 · Task 11.1 — CLI (run/report/retarget/reproduce).** Phase 10 complete; agent frontend + E2E done.
+**Phase 12 · Task 12.1 — Anthropic-API runner stub (LATER).** Phase 11 complete; CLI/reproduce/docs done.
 
 ## HANDOFF NOTE (rewrite before every stop)
 - **Just did:** Phase 7 (campaign/budget/baselines/stats via subagent) + Phase 8 (reference battery, append-only
@@ -104,10 +104,10 @@
 - [x] 10.4 (integration) end-to-end campaigns — commit: done  **Phase 10 complete.**
 
 ### Phase 11 — End-to-end validation, reproduce, docs
-- [ ] 11.1 CLI (run/report/retarget/reproduce) — commit: ______
-- [ ] 11.2 bitwise `reproduce` in CI **(release blocker)** — commit: ______
-- [ ] 11.3 re-aim demo (edit YAML → new campaign, no code change) — commit: ______
-- [ ] 11.4 README + tutorial + SPEC §14 acceptance criteria all green — commit: ______
+- [x] 11.1 CLI (run/report/retarget/reproduce) — commit: 519f83e
+- [x] 11.2 bitwise `reproduce` (release blocker) — commit: cfa4e13  (verified live: tub run->reproduce OK bitwise)
+- [x] 11.3 re-aim demo (edit YAML → new campaign, no code change) — commit: f15df06
+- [x] 11.4 README + tutorial + acceptance criteria cross-check — commit: 9ae1ff5  **Phase 11 complete.**
 
 ### Phase 12 — (LATER) Anthropic-API unattended runner
 - [ ] 12.1 runner stub + smoke test — commit: ______
