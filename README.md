@@ -1,7 +1,7 @@
-# agentic-search-for-life
+# lifeseek
 
-A **directed, re-aimable scientific-discovery harness for Conway's Game of Life (B3/S23)** — internal harness
-codename **`lifeseek`**. You give it a typed *target specification* (e.g. "a c/5 orthogonal spaceship", "a
+**lifeseek** is a **directed, re-aimable scientific-discovery harness for Conway's Game of Life (B3/S23)**.
+You give it a typed *target specification* (e.g. "a c/5 orthogonal spaceship", "a
 period-19 oscillator"); it runs steered, budget-bounded search campaigns wrapping open-source Life engines; a
 result is accepted as a **discovery** only when it is **spec-met ∧ independently re-simulation-verified ∧ novel**
 vs known catalogs. Edit the target spec → re-aim the whole effort.
@@ -21,7 +21,7 @@ vs known catalogs. Edit the target spec → re-aim the whole effort.
 ## To execute (hand off to a fresh Claude Code session)
 Open this repo in a new session and say roughly:
 
-> Implement `agentic-search-for-life` (codename `lifeseek`) by following `docs/lifeseek/IMPLEMENTATION_PLAN.md`.
+> Implement `lifeseek` by following `docs/lifeseek/IMPLEMENTATION_PLAN.md`.
 > Read `SPEC.md` and `PROGRESS.md` first. Use the `superpowers:subagent-driven-development` skill, dispatch the
 > ⟂PARALLEL lanes to concurrent subagents, and update `PROGRESS.md` in the same commit as each task. Stop at the
 > Phase 1 differential-harness gate for my review.
@@ -38,4 +38,4 @@ Open this repo in a new session and say roughly:
 - Provenance is append-only; accepted discoveries replay **bitwise** via `lifeseek reproduce`.
 
 ## License
-TBD (add before any public release).
+[MIT](LICENSE) © 2026 GonzMenSeb.
