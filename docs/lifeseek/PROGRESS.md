@@ -11,16 +11,16 @@
 ---
 
 ## ⮕ CURRENT POSITION
-**Phase 4 · Task 4.1 — novelty canonical (apgcode + cross-check).** Phase 3 complete; gate live.
+**Phase 5 · Task 5.1 — append-only SQLite event log.** Phase 4 complete; novelty oracle done.
 
 ## HANDOFF NOTE (rewrite before every stop)
-- **Just did:** Phase 3 complete (crown jewel) — universal verifier (3.1), oscillator rotor/stator+true-period
-  (3.2), still-life+GoE (3.3), acceptance gate + adversarial golden suite (3.4). Also 4.0 NoveltyResult types
-  (pulled forward). Gate = PASS∧NOVEL, no setters. Full suite green.
-- **Doing next:** Phase 4 novelty oracle — 4.1 canonical (apgcode via lifelib + independent cross-check),
-  4.2 catagolue (frozen snapshot; network-fail→UNCERTAIN), 4.3 mdl, 4.4 symmetry suite (release blocker).
-- **Half-done / careful:** novelty canonical cross-check must be INDEPENDENT of lifelib for accepted set
-  (SPEC §6.1). Remember block apgcode is xs4_33 (doc said xs4_252).
+- **Just did:** Phase 4 complete — canonical apgcode + lifelib-free independent_canonical (4.1), catagolue
+  frozen-snapshot tier w/ fail-closed UNCERTAIN (4.2), MDL derivative-of-known (4.3), symmetry soundness suite
+  (4.4, release blocker green). Full suite green, ruff+mypy clean.
+- **Doing next:** Phase 5 store/provenance — 5.1 append-only SQLite event log, 5.2 reproducible recipe,
+  5.3 crash-safe idempotent resume. Then Phase 6 sandbox+engine adapters (external-binary risk; adapters
+  stub/skip when binaries absent).
+- **Half-done / careful:** store must be APPEND-ONLY (inserts only, no update/delete) — test_store_is_append_only.
 - **Resume command:** `cd <worktree> && uv run pytest -q && cat docs/lifeseek/PROGRESS.md && git log --oneline -8`
 - **Open questions for the human:** engine source SHAs (qfind/rlifesrc/LLS) still TODO-CONFIRM in
   tools/versions.lock — only needed for real Phase 6 engine builds, not the core.
@@ -31,8 +31,8 @@
 - [ ] `uv` env builds from `uv.lock`; `pytest`, `ruff`, `mypy` run clean.
 - [x] `python-lifelib` importable (lifelib extra, py3.12); engine binaries: Containerfile stubbed (Phase 6).
 - [x] **INVARIANT:** verify/verifier.py imports sim/reference only; AST guard test green (lifelib-free).
-- [ ] **INVARIANT:** producer (lifelib) and verifier (numpy) share no simulation code; novelty uses an
-      independent cross-check canonicalizer for accepted discoveries.
+- [x] **INVARIANT:** producer/verifier share no sim code; novelty has a lifelib-free independent_canonical
+      cross-check (canonical.py, AST-guarded); symmetry soundness suite green.
 - [ ] **INVARIANT:** spec/verifier/novelty/budget are read-only through the MCP bridge (no setters).
 
 ---
@@ -66,8 +66,8 @@
 - [x] 4.0 (contract) NoveltyResult types — commit: (3.4 commit; pulled forward to unblock gate)
 - [x] 4.1 ⟂ canonical (apgcode + independent cross-check) — commit: (this commit)
 - [x] 4.2 ⟂ catagolue (frozen snapshot; network-fail → UNCERTAIN) — commit: 48c5990
-- [ ] 4.3 ⟂ mdl/minimality (reject derivative-of-known) — commit: ______
-- [ ] 4.4 (integration) symmetry soundness suite **(release blocker)** — commit: ______
+- [x] 4.3 ⟂ mdl/minimality (reject derivative-of-known) — commit: 766f432
+- [x] 4.4 (integration) symmetry soundness suite — commit: (this commit)  **Phase 4 complete (release blocker green).**
 
 ### Phase 5 — Store, provenance, recipe, crash-safe resume
 - [ ] 5.1 append-only SQLite event log — commit: ______
@@ -148,4 +148,5 @@
 - 2026-06-11 · Claude (subagent-driven exec) · Phase 0 (0.1–0.3) scaffold/env/tracker · ending 9115794
 - 2026-06-11 · Claude (subagent-driven exec) · Phase 1 (1.1–1.4) sim bedrock + differential · ending e5dd2f9
 - 2026-06-11 · Claude (subagent-driven exec) · Phase 2 (2.1–2.4) targetspec + capability map · ending db360f5
-- 2026-06-11 · Claude (subagent-driven exec) · Phase 3 (3.1–3.4)+4.0 verifier gate (crown jewel) · ending 9e554fa → (3.4 commit)
+- 2026-06-11 · Claude (subagent-driven exec) · Phase 3 (3.1–3.4)+4.0 verifier gate (crown jewel) · ending fa83998
+- 2026-06-11 · Claude (subagent-driven exec) · Phase 4 (4.1–4.4) novelty oracle (4.2/4.3 via subagents) · ending 766f432 → (4.4 commit)
