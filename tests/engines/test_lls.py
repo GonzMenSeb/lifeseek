@@ -39,7 +39,7 @@ def _block() -> Pattern:
 
 
 def _patch_present(monkeypatch: pytest.MonkeyPatch, result: SandboxResult) -> None:
-    monkeypatch.setattr(lls_mod.shutil, "which", lambda _: "/usr/bin/LLS")
+    monkeypatch.setattr("lifecore.engines.lls.shutil.which", lambda _: "/usr/bin/LLS")
     monkeypatch.setattr(lls_mod, "sandbox_available", lambda: True)
     monkeypatch.setattr(lls_mod, "run_sandboxed", lambda *a, **k: result)
 
@@ -90,7 +90,7 @@ def test_run_unsat_marker_maps_to_unsat(monkeypatch: pytest.MonkeyPatch) -> None
     cfg = LlsAdapter().build_input(_still(), EngineBudget())
     raw = LlsAdapter().run(cfg)
     assert raw.outcome is EngineOutcome.UNSAT
-    assert raw.outcome is not EngineOutcome.TIMEOUT
+    assert raw.outcome.value != EngineOutcome.TIMEOUT.value
 
 
 def test_run_found(monkeypatch: pytest.MonkeyPatch) -> None:

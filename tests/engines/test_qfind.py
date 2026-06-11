@@ -65,7 +65,7 @@ def test_run_missing_binary_returns_error_no_raise() -> None:
 
 
 def test_run_non_found_clean_exit_is_timeout_not_unsat(monkeypatch: pytest.MonkeyPatch) -> None:
-    monkeypatch.setattr(qfind_mod.shutil, "which", lambda _: "/usr/bin/qfind")
+    monkeypatch.setattr("lifecore.engines.qfind.shutil.which", lambda _: "/usr/bin/qfind")
     monkeypatch.setattr(qfind_mod, "sandbox_available", lambda: True)
     monkeypatch.setattr(
         qfind_mod,
@@ -74,11 +74,11 @@ def test_run_non_found_clean_exit_is_timeout_not_unsat(monkeypatch: pytest.Monke
     )
     raw = QfindAdapter().run(QfindAdapter().build_input(_ortho_ship(), EngineBudget()))
     assert raw.outcome is EngineOutcome.TIMEOUT
-    assert raw.outcome is not EngineOutcome.UNSAT
+    assert raw.outcome.value != EngineOutcome.UNSAT.value
 
 
 def test_run_timeout(monkeypatch: pytest.MonkeyPatch) -> None:
-    monkeypatch.setattr(qfind_mod.shutil, "which", lambda _: "/usr/bin/qfind")
+    monkeypatch.setattr("lifecore.engines.qfind.shutil.which", lambda _: "/usr/bin/qfind")
     monkeypatch.setattr(qfind_mod, "sandbox_available", lambda: True)
     monkeypatch.setattr(
         qfind_mod, "run_sandboxed", lambda *a, **k: SandboxResult(-1, "", "", True)
@@ -88,7 +88,7 @@ def test_run_timeout(monkeypatch: pytest.MonkeyPatch) -> None:
 
 
 def test_run_found(monkeypatch: pytest.MonkeyPatch) -> None:
-    monkeypatch.setattr(qfind_mod.shutil, "which", lambda _: "/usr/bin/qfind")
+    monkeypatch.setattr("lifecore.engines.qfind.shutil.which", lambda _: "/usr/bin/qfind")
     monkeypatch.setattr(qfind_mod, "sandbox_available", lambda: True)
     monkeypatch.setattr(
         qfind_mod, "run_sandboxed", lambda *a, **k: SandboxResult(0, GLIDER_RLE, "", False)

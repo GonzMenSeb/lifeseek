@@ -34,7 +34,7 @@ def _ship() -> Spaceship:
 
 
 def _patch_present(monkeypatch: pytest.MonkeyPatch, result: SandboxResult) -> None:
-    monkeypatch.setattr(rls_mod.shutil, "which", lambda _: "/usr/bin/rlifesrc")
+    monkeypatch.setattr("lifecore.engines.rlifesrc.shutil.which", lambda _: "/usr/bin/rlifesrc")
     monkeypatch.setattr(rls_mod, "sandbox_available", lambda: True)
     monkeypatch.setattr(rls_mod, "run_sandboxed", lambda *a, **k: result)
 
@@ -77,7 +77,7 @@ def test_run_unsat_marker_maps_to_unsat(monkeypatch: pytest.MonkeyPatch) -> None
     cfg = RlifesrcAdapter().build_input(_osc(), EngineBudget())
     raw = RlifesrcAdapter().run(cfg)
     assert raw.outcome is EngineOutcome.UNSAT
-    assert raw.outcome is not EngineOutcome.TIMEOUT
+    assert raw.outcome.value != EngineOutcome.TIMEOUT.value
 
 
 def test_run_found(monkeypatch: pytest.MonkeyPatch) -> None:
