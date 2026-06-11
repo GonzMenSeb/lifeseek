@@ -65,7 +65,7 @@
 ### Phase 4 — Novelty oracle (two-tier, fail-closed)
 - [x] 4.0 (contract) NoveltyResult types — commit: (3.4 commit; pulled forward to unblock gate)
 - [x] 4.1 ⟂ canonical (apgcode + independent cross-check) — commit: (this commit)
-- [ ] 4.2 ⟂ catagolue (frozen snapshot; network-fail → UNCERTAIN) — commit: ______
+- [x] 4.2 ⟂ catagolue (frozen snapshot; network-fail → UNCERTAIN) — commit: 48c5990
 - [ ] 4.3 ⟂ mdl/minimality (reject derivative-of-known) — commit: ______
 - [ ] 4.4 (integration) symmetry soundness suite **(release blocker)** — commit: ______
 
