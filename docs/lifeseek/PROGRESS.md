@@ -11,14 +11,15 @@
 ---
 
 ## ⮕ CURRENT POSITION
-**Phase 0 · Task 0.1 — not yet started.** First action: `git init` + scaffold (see IMPLEMENTATION_PLAN Task 0.1).
+**Phase 0 · Task 0.2 — Containerfile + version pins.** Scaffold + tooling done and green.
 
 ## HANDOFF NOTE (rewrite before every stop)
-- **Just did:** _nothing yet — fresh start._
-- **Doing next:** Phase 0, Task 0.1 (repo + tooling).
+- **Just did:** Task 0.1 — scaffolded src/ + tests/ tree, pyproject (deps locked), smoke test green, ruff+mypy clean.
+- **Doing next:** Task 0.2 (Containerfile + engine version pins), then 0.3 (this tracker).
 - **Half-done / careful:** _none._
-- **Resume command:** `cd lifeseek && cat docs/lifeseek/PROGRESS.md && git log --oneline -5`
-- **Open questions for the human:** confirm engine source SHAs to pin (qfind, rlifesrc, LLS) in Task 0.2.
+- **Resume command:** `cd <worktree> && uv run pytest -q && cat docs/lifeseek/PROGRESS.md && git log --oneline -8`
+- **Open questions for the human:** engine source SHAs to pin (qfind, rlifesrc, LLS) — Task 0.2 pins
+  best-known stable refs with a TODO to confirm; not a blocker for the pure-Python core (Phases 1–5).
 
 ---
 
@@ -35,7 +36,7 @@
 ## Phase checklist
 
 ### Phase 0 — Scaffold, env lock, progress artifact
-- [ ] 0.1 Repo + tooling — commit: ______
+- [x] 0.1 Repo + tooling — commit: (this commit)
 - [ ] 0.2 Containerfile + version pins — commit: ______
 - [ ] 0.3 Instantiate PROGRESS.md — commit: ______
 
@@ -122,7 +123,14 @@
 ---
 
 ## Decisions log (append-only; record every deviation from the plan + why)
-- _(none yet)_
+- **0.1 / tooling config consolidated into `pyproject.toml`** instead of separate `ruff.toml` + `mypy.ini`.
+  Why: single source of truth, avoids config drift; ruff/mypy both read `[tool.*]` from pyproject. Same strictness.
+- **0.1 / Python pinned to 3.12** (`.python-version`), not bare 3.11. Why: best wheel coverage for numpy 2.x and
+  clean `python-lifelib` 2.5.6 build (verified importing + loading b3s23). `requires-python = >=3.11` kept.
+- **0.1 / added `pyyaml` to core deps** (spec YAML io, Phase 2) and split heavy/build-sensitive backends
+  (`python-lifelib`, `python-sat`, `mcp`) into optional extras so the deterministic numpy core always installs.
+- **0.1 / `python-lifelib` confirmed working on 3.12** — JIT-compiles a shared object (~25s) on first rule load;
+  locked into the `lifelib` extra. Removes the main external-build risk for Phase 1 lane-B.
 
 ## Blockers (open; clear with resolution + date)
 - _(none yet)_
