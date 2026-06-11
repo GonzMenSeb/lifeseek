@@ -11,13 +11,14 @@
 ---
 
 ## ⮕ CURRENT POSITION
-**Phase 1 · Task 1.1 — Pattern data model + RLE I/O (contract).** Phase 0 complete & green.
+**Phase 2 · Task 2.1 — base TargetSpec + hashing + YAML (contract).** Phase 1 complete & green.
 
 ## HANDOFF NOTE (rewrite before every stop)
-- **Just did:** Phase 0 complete — scaffold + tooling (0.1), Containerfile + versions.lock (0.2), tracker (0.3).
-  Env: Python 3.12 via uv, numpy/pydantic/pyyaml core + lifelib extra locked. Smoke/ruff/mypy green.
-- **Doing next:** Task 1.1 (contract) `sim/pattern.py` + `sim/rle.py` with TDD; then parallel lanes 1.2/1.3 → 1.4.
-- **Half-done / careful:** Task 1.1 is the FROZEN contract for 1.2–1.4 — get the Pattern API right before fan-out.
+- **Just did:** Phase 1 complete — Pattern+RLE (1.1), numpy reference sim (1.2, lifelib-free), lifelib
+  backend (1.3), differential harness (1.4, 120 soups agree). Full suite green, ruff+mypy clean.
+- **Doing next:** Phase 2 Task 2.1 (contract) base TargetSpec (pydantic frozen) + deterministic hashing + YAML io.
+- **Half-done / careful:** 2.1 is the frozen contract for 2.2–2.4. Spaceship pop/bbox are POST-HOC filters,
+  never engine inputs (SPEC §4.1) — enforce in 2.2.
 - **Resume command:** `cd <worktree> && uv run pytest -q && cat docs/lifeseek/PROGRESS.md && git log --oneline -8`
 - **Open questions for the human:** engine source SHAs (qfind/rlifesrc/LLS) still TODO-CONFIRM in
   tools/versions.lock — only needed for real Phase 6 engine builds, not the core.
@@ -27,7 +28,7 @@
 ## Environment / invariants checklist (verify once, re-verify if they change)
 - [ ] `uv` env builds from `uv.lock`; `pytest`, `ruff`, `mypy` run clean.
 - [x] `python-lifelib` importable (lifelib extra, py3.12); engine binaries: Containerfile stubbed (Phase 6).
-- [ ] **INVARIANT:** `verify/verifier.py` imports `sim/reference.py` and **never** lifelib (guard test green).
+- [~] **INVARIANT:** reference path verified lifelib-free via AST guard test (Phase 3 wires verifier.py).
 - [ ] **INVARIANT:** producer (lifelib) and verifier (numpy) share no simulation code; novelty uses an
       independent cross-check canonicalizer for accepted discoveries.
 - [ ] **INVARIANT:** spec/verifier/novelty/budget are read-only through the MCP bridge (no setters).
@@ -45,7 +46,7 @@
 - [x] 1.1 (contract) Pattern + RLE io — commit: (this commit)
 - [x] 1.2 ⟂A NumPy reference simulator (verifier path; no lifelib) — commit: (this commit)
 - [x] 1.3 ⟂B lifelib HashLife backend — commit: (this commit)
-- [ ] 1.4 (integration) lifelib↔numpy differential harness **(green required to proceed)** — commit: ______
+- [x] 1.4 (integration) lifelib↔numpy differential harness — commit: (this commit)  **Phase 1 complete; Phase 2 unblocked.**
 
 ### Phase 2 — Target spec + capability map + hashing
 - [ ] 2.1 (contract) base spec + hashing + YAML — commit: ______
@@ -132,9 +133,15 @@
   (`python-lifelib`, `python-sat`, `mcp`) into optional extras so the deterministic numpy core always installs.
 - **0.1 / `python-lifelib` confirmed working on 3.12** — JIT-compiles a shared object (~25s) on first rule load;
   locked into the `lifelib` extra. Removes the main external-build risk for Phase 1 lane-B.
+- **1.3 / DOC ERROR corrected: block apgcode is `xs4_33`, not `xs4_252`** as written in SPEC §/PLAN 1.3 & 4.1.
+  lifelib (the authoritative canonicalizer) is ground truth; tests assert `xs4_33`. Apply the same correction
+  when implementing the novelty canonical cross-check (Task 4.1) and any golden fixtures.
+- **1.1 / `bbox` of an empty Pattern returns `(0,0,-1,-1)`** so `width`/`height` compute to 0 cleanly
+  (avoids a None branch in the verifier's residual logic).
 
 ## Blockers (open; clear with resolution + date)
 - _(none yet)_
 
 ## Session log (one line per work session: date · who · phase/tasks touched · ending commit)
-- 2026-06-11 · Claude (subagent-driven exec) · Phase 0 (0.1–0.3) scaffold/env/tracker · ending 3a3c95e → (0.3 commit)
+- 2026-06-11 · Claude (subagent-driven exec) · Phase 0 (0.1–0.3) scaffold/env/tracker · ending 9115794
+- 2026-06-11 · Claude (subagent-driven exec) · Phase 1 (1.1–1.4) sim bedrock + differential · ending cab6f02 → (1.4 commit)
