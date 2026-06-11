@@ -49,7 +49,7 @@
 - [x] 1.4 (integration) lifelib↔numpy differential harness — commit: (this commit)  **Phase 1 complete; Phase 2 unblocked.**
 
 ### Phase 2 — Target spec + capability map + hashing
-- [ ] 2.1 (contract) base spec + hashing + YAML — commit: ______
+- [x] 2.1 (contract) base spec + hashing + YAML — commit: (this commit)
 - [ ] 2.2 ⟂A spaceship spec (population/bbox = post-hoc, not engine input) — commit: ______
 - [ ] 2.3 ⟂B oscillator (mechanism-split) + still-life + LATER stubs — commit: ______
 - [ ] 2.4 (integration) capability map (gun/oblique → no-capable-engine) — commit: ______
