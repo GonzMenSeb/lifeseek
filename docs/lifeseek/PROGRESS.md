@@ -11,14 +11,15 @@
 ---
 
 ## ⮕ CURRENT POSITION
-**Phase 2 · Task 2.1 — base TargetSpec + hashing + YAML (contract).** Phase 1 complete & green.
+**Phase 3 · Task 3.1 — universal closed-world verifier + record (contract).** Phase 2 complete & green.
 
 ## HANDOFF NOTE (rewrite before every stop)
-- **Just did:** Phase 1 complete — Pattern+RLE (1.1), numpy reference sim (1.2, lifelib-free), lifelib
-  backend (1.3), differential harness (1.4, 120 soups agree). Full suite green, ruff+mypy clean.
-- **Doing next:** Phase 2 Task 2.1 (contract) base TargetSpec (pydantic frozen) + deterministic hashing + YAML io.
-- **Half-done / careful:** 2.1 is the frozen contract for 2.2–2.4. Spaceship pop/bbox are POST-HOC filters,
-  never engine inputs (SPEC §4.1) — enforce in 2.2.
+- **Just did:** Phase 2 complete — base spec+hashing+yaml (2.1), spaceship (2.2), oscillator/stilllife/stubs
+  (2.3), capability map (2.4: oblique→ikpx2, gun/assembly→[]). Full suite green, ruff+mypy clean.
+- **Doing next:** Phase 3 Task 3.1 (contract) universal closed-world verifier on the REFERENCE path only +
+  signed VerificationRecord. CROWN JEWEL — trust-critical; implement carefully, AST-guard no lifelib.
+- **Half-done / careful:** 3.1 is the frozen contract for 3.2–3.4. Verifier must: empty-field embed w/ margin,
+  settle T_settle, exact-image-at-period, EMPTY-RESIDUAL assertion, TRUE minimal period (reject trivial LCM).
 - **Resume command:** `cd <worktree> && uv run pytest -q && cat docs/lifeseek/PROGRESS.md && git log --oneline -8`
 - **Open questions for the human:** engine source SHAs (qfind/rlifesrc/LLS) still TODO-CONFIRM in
   tools/versions.lock — only needed for real Phase 6 engine builds, not the core.
@@ -52,7 +53,7 @@
 - [x] 2.1 (contract) base spec + hashing + YAML — commit: (this commit)
 - [x] 2.2 ⟂A spaceship spec (population/bbox = post-hoc, not engine input) — commit: (this commit)
 - [x] 2.3 ⟂B oscillator (mechanism-split) + still-life + LATER stubs — commit: (this commit)
-- [ ] 2.4 (integration) capability map (gun/oblique → no-capable-engine) — commit: ______
+- [x] 2.4 (integration) capability map (gun/oblique → no-capable-engine) — commit: (this commit)  **Phase 2 complete.**
 
 ### Phase 3 — Verification gate (crown jewel)
 - [ ] 3.1 (contract) universal closed-world verifier + record (reference path only) — commit: ______
@@ -144,4 +145,5 @@
 
 ## Session log (one line per work session: date · who · phase/tasks touched · ending commit)
 - 2026-06-11 · Claude (subagent-driven exec) · Phase 0 (0.1–0.3) scaffold/env/tracker · ending 9115794
-- 2026-06-11 · Claude (subagent-driven exec) · Phase 1 (1.1–1.4) sim bedrock + differential · ending cab6f02 → (1.4 commit)
+- 2026-06-11 · Claude (subagent-driven exec) · Phase 1 (1.1–1.4) sim bedrock + differential · ending e5dd2f9
+- 2026-06-11 · Claude (subagent-driven exec) · Phase 2 (2.1–2.4) targetspec + capability map · ending 1066b3f → (2.4 commit)
