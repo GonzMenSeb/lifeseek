@@ -26,7 +26,7 @@
 
 ## Environment / invariants checklist (verify once, re-verify if they change)
 - [ ] `uv` env builds from `uv.lock`; `pytest`, `ruff`, `mypy` run clean.
-- [ ] `python-lifelib` importable in CI; engine binaries build in the Containerfile at pinned SHAs.
+- [x] `python-lifelib` importable (lifelib extra, py3.12); engine binaries: Containerfile stubbed (Phase 6).
 - [ ] **INVARIANT:** `verify/verifier.py` imports `sim/reference.py` and **never** lifelib (guard test green).
 - [ ] **INVARIANT:** producer (lifelib) and verifier (numpy) share no simulation code; novelty uses an
       independent cross-check canonicalizer for accepted discoveries.
@@ -44,7 +44,7 @@
 ### Phase 1 — Pattern model + dual simulators + differential harness  *(bedrock; gates Phase 2)*
 - [x] 1.1 (contract) Pattern + RLE io — commit: (this commit)
 - [x] 1.2 ⟂A NumPy reference simulator (verifier path; no lifelib) — commit: (this commit)
-- [ ] 1.3 ⟂B lifelib HashLife backend — commit: ______
+- [x] 1.3 ⟂B lifelib HashLife backend — commit: (this commit)
 - [ ] 1.4 (integration) lifelib↔numpy differential harness **(green required to proceed)** — commit: ______
 
 ### Phase 2 — Target spec + capability map + hashing
