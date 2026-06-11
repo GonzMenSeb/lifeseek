@@ -1,0 +1,16 @@
+# Example lifeseek campaign: re-derive the blinker (period-2 oscillator).
+#
+# `seed_candidates` is the v1 stand-in for sandboxed engine output: external engine
+# binaries are absent in this build, so the candidate stream is seeded from these RLE
+# strings. In production these come from sandboxed engine adapters; the orchestrator —
+# verify -> novelty -> immutable gate -> provenance — is identical either way.
+spec:
+  kind: oscillator
+  period: 2
+  bbox_max: [3, 3]
+  rule: B3/S23
+engine_policy: [rlifesrc, lls]          # informational; the capability map is authoritative
+budget:
+  max_engine_cpu_seconds: 100.0
+seed_candidates:
+  - "3o!"                                # the blinker, in RLE
