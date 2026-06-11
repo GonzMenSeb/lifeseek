@@ -75,7 +75,7 @@
 - [x] 5.3 idempotent crash-safe resume — commit: 9d046c5  **Phase 5 complete.**
 
 ### Phase 6 — Sandbox + engine adapters
-- [ ] 6.1 (contract) EngineAdapter ABC — commit: ______
+- [x] 6.1 (contract) EngineAdapter ABC — commit: (this commit)
 - [ ] 6.2 (contract) sandbox runner + fuzzed parsers — commit: ______
 - [ ] 6.3 ⟂ qfind adapter (TIMEOUT≠UNSAT) — commit: ______
 - [ ] 6.4 ⟂ rlifesrc adapter — commit: ______
