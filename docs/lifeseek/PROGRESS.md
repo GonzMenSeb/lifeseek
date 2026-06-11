@@ -11,15 +11,16 @@
 ---
 
 ## ⮕ CURRENT POSITION
-**Phase 0 · Task 0.2 — Containerfile + version pins.** Scaffold + tooling done and green.
+**Phase 1 · Task 1.1 — Pattern data model + RLE I/O (contract).** Phase 0 complete & green.
 
 ## HANDOFF NOTE (rewrite before every stop)
-- **Just did:** Task 0.1 — scaffolded src/ + tests/ tree, pyproject (deps locked), smoke test green, ruff+mypy clean.
-- **Doing next:** Task 0.2 (Containerfile + engine version pins), then 0.3 (this tracker).
-- **Half-done / careful:** _none._
+- **Just did:** Phase 0 complete — scaffold + tooling (0.1), Containerfile + versions.lock (0.2), tracker (0.3).
+  Env: Python 3.12 via uv, numpy/pydantic/pyyaml core + lifelib extra locked. Smoke/ruff/mypy green.
+- **Doing next:** Task 1.1 (contract) `sim/pattern.py` + `sim/rle.py` with TDD; then parallel lanes 1.2/1.3 → 1.4.
+- **Half-done / careful:** Task 1.1 is the FROZEN contract for 1.2–1.4 — get the Pattern API right before fan-out.
 - **Resume command:** `cd <worktree> && uv run pytest -q && cat docs/lifeseek/PROGRESS.md && git log --oneline -8`
-- **Open questions for the human:** engine source SHAs to pin (qfind, rlifesrc, LLS) — Task 0.2 pins
-  best-known stable refs with a TODO to confirm; not a blocker for the pure-Python core (Phases 1–5).
+- **Open questions for the human:** engine source SHAs (qfind/rlifesrc/LLS) still TODO-CONFIRM in
+  tools/versions.lock — only needed for real Phase 6 engine builds, not the core.
 
 ---
 
@@ -37,8 +38,8 @@
 
 ### Phase 0 — Scaffold, env lock, progress artifact
 - [x] 0.1 Repo + tooling — commit: f263232
-- [x] 0.2 Containerfile + version pins — commit: (this commit)
-- [ ] 0.3 Instantiate PROGRESS.md — commit: ______
+- [x] 0.2 Containerfile + version pins — commit: 3a3c95e
+- [x] 0.3 Instantiate PROGRESS.md — commit: (this commit)  **Phase 0 complete.**
 
 ### Phase 1 — Pattern model + dual simulators + differential harness  *(bedrock; gates Phase 2)*
 - [ ] 1.1 (contract) Pattern + RLE io — commit: ______
@@ -136,4 +137,4 @@
 - _(none yet)_
 
 ## Session log (one line per work session: date · who · phase/tasks touched · ending commit)
-- _(none yet)_
+- 2026-06-11 · Claude (subagent-driven exec) · Phase 0 (0.1–0.3) scaffold/env/tracker · ending 3a3c95e → (0.3 commit)
