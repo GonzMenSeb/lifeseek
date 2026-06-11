@@ -42,7 +42,7 @@
 - [x] 0.3 Instantiate PROGRESS.md — commit: (this commit)  **Phase 0 complete.**
 
 ### Phase 1 — Pattern model + dual simulators + differential harness  *(bedrock; gates Phase 2)*
-- [ ] 1.1 (contract) Pattern + RLE io — commit: ______
+- [x] 1.1 (contract) Pattern + RLE io — commit: (this commit)
 - [ ] 1.2 ⟂A NumPy reference simulator (verifier path; no lifelib) — commit: ______
 - [ ] 1.3 ⟂B lifelib HashLife backend — commit: ______
 - [ ] 1.4 (integration) lifelib↔numpy differential harness **(green required to proceed)** — commit: ______
