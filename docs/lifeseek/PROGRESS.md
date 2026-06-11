@@ -11,16 +11,15 @@
 ---
 
 ## ⮕ CURRENT POSITION
-**Phase 8 · Task 8.1 — fixed reference battery.** Phase 7 complete; campaign/budget/baselines/stats done.
+**Phase 9 · Task 9.1 — MCP bridge read/append tools.** Phase 8 complete; strategy/memory done.
 
 ## HANDOFF NOTE (rewrite before every stop)
-- **Just did:** Phase 5 (store/provenance/recipe/resume) + Phase 6 (engine adapter ABC, bwrap sandbox + fuzzed
-  parsers, qfind/rlifesrc/LLS/ikpx2-stub adapters, conformance suite). Engines binaries absent -> 3 integration
-  tests skip; everything else green. Full suite ~196 tests, ruff+mypy clean.
-- **Doing next:** Phase 7 campaign/budget/baselines/stats — 7.1 Campaign(frozen spec)+policy+budget+checkpoints,
-  7.2 budget ledger hard-stops, 7.3 IID/SCS baselines through the SAME gate at equal budget, 7.4 CIs + e-value/FDR.
-- **Half-done / careful:** engine adapters added shared engines/_common.py (run_engine plumbing) — not in the
-  original file list but clean; TIMEOUT and UNSAT kept strictly distinct.
+- **Just did:** Phase 7 (campaign/budget/baselines/stats via subagent) + Phase 8 (reference battery, append-only
+  DGM strategy archive crediting correct UNSAT, failure memory via subagent). 226 passed, 3 skipped, clean.
+- **Doing next:** Phase 9 MCP bridge (SAFETY-CRITICAL): 9.1 read/append tools (no setters on spec/gate/budget),
+  9.2 adversarial immutability tests (RELEASE BLOCKER) — reject relaxation/widen/UNCERTAIN->NOVEL, human-gated retarget.
+- **Half-done / careful:** the MCP bridge must MECHANICALLY reject any agent attempt to widen tolerance fields or
+  reinterpret novelty; do 9 myself (trust-critical).
 - **Resume command:** `cd <worktree> && uv run pytest -q && cat docs/lifeseek/PROGRESS.md && git log --oneline -8`
 - **Open questions for the human:** engine source SHAs (qfind/rlifesrc/LLS) still TODO-CONFIRM in
   tools/versions.lock — only needed for real Phase 6 engine builds, not the core.
@@ -90,9 +89,9 @@
 - [x] 7.4 CIs + e-value/FDR discovery-time correction — commit: c61ff33  **Phase 7 complete.**
 
 ### Phase 8 — Strategy archive + failure memory + reference battery
-- [ ] 8.1 fixed reference battery (reachable + UNSAT) — commit: ______
-- [ ] 8.2 strategy archive (DGM parent-select; credit correct UNSAT) — commit: ______
-- [ ] 8.3 distilled failure memory — commit: ______
+- [x] 8.1 fixed reference battery (reachable + UNSAT) — commit: 5a84c10
+- [x] 8.2 strategy archive (DGM parent-select; credit correct UNSAT) — commit: 234b0d2
+- [x] 8.3 distilled failure memory — commit: b8f2d2f  **Phase 8 complete.**
 
 ### Phase 9 — MCP bridge (immutability enforcement)
 - [ ] 9.1 bridge read/append tools — commit: ______
@@ -151,4 +150,6 @@
 - 2026-06-11 · Claude (subagent-driven exec) · Phase 3 (3.1–3.4)+4.0 verifier gate (crown jewel) · ending fa83998
 - 2026-06-11 · Claude (subagent-driven exec) · Phase 4 (4.1–4.4) novelty oracle · ending e6250e1
 - 2026-06-11 · Claude (subagent-driven exec) · Phase 5 store (subagent) · ending 9d046c5
-- 2026-06-11 · Claude (subagent-driven exec) · Phase 6 sandbox+engines (6.3–6.7 via subagent) · ending 4181c0e → (this commit)
+- 2026-06-11 · Claude (subagent-driven exec) · Phase 6 sandbox+engines · ending 7d6161d
+- 2026-06-11 · Claude (subagent-driven exec) · Phase 7 campaign (subagent) · ending c61ff33
+- 2026-06-11 · Claude (subagent-driven exec) · Phase 8 strategy (subagent) · ending b8f2d2f → (this commit)
