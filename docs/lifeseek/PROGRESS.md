@@ -27,7 +27,7 @@
 ---
 
 ## Environment / invariants checklist (verify once, re-verify if they change)
-- [ ] `uv` env builds from `uv.lock`; `pytest`, `ruff`, `mypy` run clean.
+- [x] `uv` env builds from `uv.lock`; `pytest` (267 passed/5 engine-skip), `ruff`, `mypy` (110 files) clean.
 - [x] `python-lifelib` importable (lifelib extra, py3.12); engine binaries: Containerfile stubbed (Phase 6).
 - [x] **INVARIANT:** verify/verifier.py imports sim/reference only; AST guard test green (lifelib-free).
 - [x] **INVARIANT:** producer/verifier share no sim code; novelty has a lifelib-free independent_canonical
