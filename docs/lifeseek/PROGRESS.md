@@ -11,7 +11,7 @@
 ---
 
 ## ⮕ CURRENT POSITION
-**Phase 10 · Task 10.1 — agent SKILL.md + runner + E2E.** Phase 9 complete; MCP immutability enforced.
+**Phase 11 · Task 11.1 — CLI (run/report/retarget/reproduce).** Phase 10 complete; agent frontend + E2E done.
 
 ## HANDOFF NOTE (rewrite before every stop)
 - **Just did:** Phase 7 (campaign/budget/baselines/stats via subagent) + Phase 8 (reference battery, append-only
@@ -98,10 +98,10 @@
 - [x] 9.2 adversarial immutability tests — commit: 86a9831  **Phase 9 complete (release blocker green).**
 
 ### Phase 10 — Claude Code agent frontend
-- [ ] 10.1 lifeseek SKILL.md (staged loop; forbidden actions) — commit: ______
-- [ ] 10.2 subagents (strategist/search-runner/verifier-caller/analyst) — commit: ______
-- [ ] 10.3 async redirect/chat + sync checkpoints — commit: ______
-- [ ] 10.4 (integration) end-to-end campaigns (re-derive known; directed; no-capable-engine; baselines) — commit: ______
+- [x] 10.1 lifeseek SKILL.md (staged loop; forbidden actions) — commit: done
+- [x] 10.2 subagents (strategist/search-runner/verifier-caller/analyst) — commit: done
+- [x] 10.3 async redirect/chat + sync checkpoints — commit: done
+- [x] 10.4 (integration) end-to-end campaigns — commit: done  **Phase 10 complete.**
 
 ### Phase 11 — End-to-end validation, reproduce, docs
 - [ ] 11.1 CLI (run/report/retarget/reproduce) — commit: ______
