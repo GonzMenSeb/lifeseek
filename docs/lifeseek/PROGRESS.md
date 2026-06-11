@@ -11,16 +11,16 @@
 ---
 
 ## ⮕ CURRENT POSITION
-**Phase 6 · Task 6.1 — EngineAdapter ABC (contract).** Phase 5 complete; store/provenance done.
+**Phase 7 · Task 7.1 — campaign config (frozen spec).** Phase 6 complete; engines+sandbox done.
 
 ## HANDOFF NOTE (rewrite before every stop)
-- **Just did:** Phase 4 complete — canonical apgcode + lifelib-free independent_canonical (4.1), catagolue
-  frozen-snapshot tier w/ fail-closed UNCERTAIN (4.2), MDL derivative-of-known (4.3), symmetry soundness suite
-  (4.4, release blocker green). Full suite green, ruff+mypy clean.
-- **Doing next:** Phase 5 store/provenance — 5.1 append-only SQLite event log, 5.2 reproducible recipe,
-  5.3 crash-safe idempotent resume. Then Phase 6 sandbox+engine adapters (external-binary risk; adapters
-  stub/skip when binaries absent).
-- **Half-done / careful:** store must be APPEND-ONLY (inserts only, no update/delete) — test_store_is_append_only.
+- **Just did:** Phase 5 (store/provenance/recipe/resume) + Phase 6 (engine adapter ABC, bwrap sandbox + fuzzed
+  parsers, qfind/rlifesrc/LLS/ikpx2-stub adapters, conformance suite). Engines binaries absent -> 3 integration
+  tests skip; everything else green. Full suite ~196 tests, ruff+mypy clean.
+- **Doing next:** Phase 7 campaign/budget/baselines/stats — 7.1 Campaign(frozen spec)+policy+budget+checkpoints,
+  7.2 budget ledger hard-stops, 7.3 IID/SCS baselines through the SAME gate at equal budget, 7.4 CIs + e-value/FDR.
+- **Half-done / careful:** engine adapters added shared engines/_common.py (run_engine plumbing) — not in the
+  original file list but clean; TIMEOUT and UNSAT kept strictly distinct.
 - **Resume command:** `cd <worktree> && uv run pytest -q && cat docs/lifeseek/PROGRESS.md && git log --oneline -8`
 - **Open questions for the human:** engine source SHAs (qfind/rlifesrc/LLS) still TODO-CONFIRM in
   tools/versions.lock — only needed for real Phase 6 engine builds, not the core.
@@ -77,11 +77,11 @@
 ### Phase 6 — Sandbox + engine adapters
 - [x] 6.1 (contract) EngineAdapter ABC — commit: (this commit)
 - [x] 6.2 (contract) sandbox runner + fuzzed parsers — commit: (this commit)
-- [ ] 6.3 ⟂ qfind adapter (TIMEOUT≠UNSAT) — commit: ______
-- [ ] 6.4 ⟂ rlifesrc adapter — commit: ______
-- [ ] 6.5 ⟂ LLS adapter (SAT + GoE preimage) — commit: ______
-- [ ] 6.6 ikpx2 stub (NO_CAPABILITY) — commit: ______
-- [ ] 6.7 (integration) adapter conformance suite — commit: ______
+- [x] 6.3 ⟂ qfind adapter (TIMEOUT≠UNSAT) — commit: f5c0757
+- [x] 6.4 ⟂ rlifesrc adapter — commit: 7f2ecdb
+- [x] 6.5 ⟂ LLS adapter (SAT + GoE preimage) — commit: 349a5c9
+- [x] 6.6 ikpx2 stub (NO_CAPABILITY) — commit: 37fc49e
+- [x] 6.7 (integration) adapter conformance suite — commit: 4181c0e  **Phase 6 complete.**
 
 ### Phase 7 — Campaign, budget ledger, baselines, statistics
 - [ ] 7.1 campaign config (frozen spec) — commit: ______
@@ -149,4 +149,6 @@
 - 2026-06-11 · Claude (subagent-driven exec) · Phase 1 (1.1–1.4) sim bedrock + differential · ending e5dd2f9
 - 2026-06-11 · Claude (subagent-driven exec) · Phase 2 (2.1–2.4) targetspec + capability map · ending db360f5
 - 2026-06-11 · Claude (subagent-driven exec) · Phase 3 (3.1–3.4)+4.0 verifier gate (crown jewel) · ending fa83998
-- 2026-06-11 · Claude (subagent-driven exec) · Phase 4 (4.1–4.4) novelty oracle (4.2/4.3 via subagents) · ending 766f432 → (4.4 commit)
+- 2026-06-11 · Claude (subagent-driven exec) · Phase 4 (4.1–4.4) novelty oracle · ending e6250e1
+- 2026-06-11 · Claude (subagent-driven exec) · Phase 5 store (subagent) · ending 9d046c5
+- 2026-06-11 · Claude (subagent-driven exec) · Phase 6 sandbox+engines (6.3–6.7 via subagent) · ending 4181c0e → (this commit)
