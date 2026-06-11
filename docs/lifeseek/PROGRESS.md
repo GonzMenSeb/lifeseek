@@ -11,7 +11,7 @@
 ---
 
 ## ⮕ CURRENT POSITION
-**Phase 7 · Task 7.1 — campaign config (frozen spec).** Phase 6 complete; engines+sandbox done.
+**Phase 8 · Task 8.1 — fixed reference battery.** Phase 7 complete; campaign/budget/baselines/stats done.
 
 ## HANDOFF NOTE (rewrite before every stop)
 - **Just did:** Phase 5 (store/provenance/recipe/resume) + Phase 6 (engine adapter ABC, bwrap sandbox + fuzzed
@@ -84,10 +84,10 @@
 - [x] 6.7 (integration) adapter conformance suite — commit: 4181c0e  **Phase 6 complete.**
 
 ### Phase 7 — Campaign, budget ledger, baselines, statistics
-- [ ] 7.1 campaign config (frozen spec) — commit: ______
-- [ ] 7.2 budget ledger + hard stops — commit: ______
-- [ ] 7.3 IID + SCS baselines (same gate, equal budget) — commit: ______
-- [ ] 7.4 CIs + e-value/FDR discovery-time correction — commit: ______
+- [x] 7.1 campaign config (frozen spec) — commit: 5d7e60e
+- [x] 7.2 budget ledger + hard stops — commit: 955f755
+- [x] 7.3 IID + SCS baselines (same gate, equal budget) — commit: 3c42586
+- [x] 7.4 CIs + e-value/FDR discovery-time correction — commit: c61ff33  **Phase 7 complete.**
 
 ### Phase 8 — Strategy archive + failure memory + reference battery
 - [ ] 8.1 fixed reference battery (reachable + UNSAT) — commit: ______
