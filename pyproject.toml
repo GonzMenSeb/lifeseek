@@ -62,7 +62,13 @@ mypy_path = "src"
 namespace_packages = true
 explicit_package_bases = true
 files = ["src", "tests"]
-# lifelib / pysat are optional, untyped C-extension backends.
+# lifelib / pysat / mcp are optional, untyped (or absent) backends.
 [[tool.mypy.overrides]]
-module = ["lifelib.*", "pysat.*"]
+module = ["lifelib.*", "pysat.*", "mcp.*"]
 ignore_missing_imports = true
+
+# The MCP server registers tools via FastMCP's (untyped) decorator; that is inherent
+# to the transport and confined to this thin wrapper.
+[[tool.mypy.overrides]]
+module = ["lifeseek_mcp.server"]
+disallow_untyped_decorators = false
