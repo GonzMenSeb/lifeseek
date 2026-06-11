@@ -36,8 +36,8 @@
 ## Phase checklist
 
 ### Phase 0 — Scaffold, env lock, progress artifact
-- [x] 0.1 Repo + tooling — commit: (this commit)
-- [ ] 0.2 Containerfile + version pins — commit: ______
+- [x] 0.1 Repo + tooling — commit: f263232
+- [x] 0.2 Containerfile + version pins — commit: (this commit)
 - [ ] 0.3 Instantiate PROGRESS.md — commit: ______
 
 ### Phase 1 — Pattern model + dual simulators + differential harness  *(bedrock; gates Phase 2)*

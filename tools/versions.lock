@@ -1,0 +1,54 @@
+# lifeseek engine + backend version lock (env-lock foundation, Task 0.2)
+# ------------------------------------------------------------------------------
+# Purpose: pin every external Life tool to an exact, reproducible source revision
+# + build flags so `lifeseek reproduce <id>` can replay the acceptance pipeline
+# bitwise (SPEC §9). The deterministic core (sim/verify/novelty) NEVER depends on
+# these binaries for *trust* — they are directed *producers* only. Verification
+# always runs on the numpy reference path.
+#
+# Format: one block per tool. `sha` MUST be a full 40-char commit SHA before a
+# release build. Values marked TODO-CONFIRM are the open question flagged in
+# PROGRESS.md HANDOFF (the human confirms the exact pinned commits); they do not
+# block Phases 1–5 (pure-Python core) or the adapter *stubs/interfaces*.
+
+[backend.lifelib]
+# Producer backend (HashLife evolution + canonicalization). pip-installable,
+# already locked in uv.lock. Confirmed building + importing on CPython 3.12.
+pypi          = "python-lifelib"
+version       = "2.5.6"
+role          = "backend-only"   # NOT a directed search engine
+build          = "JIT-compiles a per-rule shared object on first load (~25s)"
+
+[engine.qfind]
+repo          = "https://github.com/Matthias-Merzenich/qfind"
+sha           = "TODO-CONFIRM"   # pin exact commit; default branch = master
+build         = "cc -O3 -march=native -o qfind qfind.c   (single-file C; -DNOCACHE optional)"
+role          = "spaceship search (orthogonal/diagonal), width-parameterized"
+outcomes      = "FOUND | TIMEOUT (never asserts UNSAT/non-existence)"
+
+[engine.rlifesrc]
+repo          = "https://github.com/AlephAlpha/rlifesrc"
+sha           = "TODO-CONFIRM"   # pin exact commit; built with cargo
+build         = "cargo build --release -p rlifesrc   (Rust; binary at target/release/rlifesrc)"
+role          = "general backtracking: low-period oscillators, still-lifes, small ships"
+outcomes      = "FOUND | UNSAT | TIMEOUT"
+
+[engine.lls]
+repo          = "https://github.com/OscarCunningham/logic-life-search"
+sha           = "TODO-CONFIRM"   # pin exact commit
+build         = "python LLS (invokes an external SAT solver, e.g. cryptominisat/kissat); pin the solver too"
+sat_solver     = "kissat"
+sat_solver_sha = "TODO-CONFIRM"
+role          = "SAT: still-lifes, exists-in-bbox, GoE preimage (thickness >= 4 padding)"
+outcomes      = "FOUND | UNSAT | TIMEOUT"
+
+[engine.ikpx2]
+repo          = "https://gitlab.com/apgoucher/lifelib"   # ikpx2 lives in the lifelib ecosystem
+sha           = "TODO-CONFIRM"
+build         = "v1: STUB ONLY — adapter returns NO_CAPABILITY (oblique/knightship is LATER)"
+role          = "oblique / knightship / hard velocities (stubbed in v1)"
+
+[base_image]
+# Containerfile base, pinned by digest for reproducibility (SPEC §9).
+ref           = "python:3.12-slim-bookworm"
+digest        = "TODO-CONFIRM"   # resolve via: docker buildx imagetools inspect python:3.12-slim-bookworm
