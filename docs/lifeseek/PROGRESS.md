@@ -11,7 +11,7 @@
 ---
 
 ## ⮕ CURRENT POSITION
-**Phase 9 · Task 9.1 — MCP bridge read/append tools.** Phase 8 complete; strategy/memory done.
+**Phase 10 · Task 10.1 — agent SKILL.md + runner + E2E.** Phase 9 complete; MCP immutability enforced.
 
 ## HANDOFF NOTE (rewrite before every stop)
 - **Just did:** Phase 7 (campaign/budget/baselines/stats via subagent) + Phase 8 (reference battery, append-only
@@ -32,7 +32,7 @@
 - [x] **INVARIANT:** verify/verifier.py imports sim/reference only; AST guard test green (lifelib-free).
 - [x] **INVARIANT:** producer/verifier share no sim code; novelty has a lifelib-free independent_canonical
       cross-check (canonical.py, AST-guarded); symmetry soundness suite green.
-- [ ] **INVARIANT:** spec/verifier/novelty/budget are read-only through the MCP bridge (no setters).
+- [x] **INVARIANT:** MCP bridge is read/append-only; relaxation + UNCERTAIN->NOVEL blocked; retarget human-gated.
 
 ---
 
@@ -94,8 +94,8 @@
 - [x] 8.3 distilled failure memory — commit: b8f2d2f  **Phase 8 complete.**
 
 ### Phase 9 — MCP bridge (immutability enforcement)
-- [ ] 9.1 bridge read/append tools — commit: ______
-- [ ] 9.2 adversarial immutability tests **(release blocker)** — commit: ______
+- [x] 9.1 bridge read/append tools — commit: ba1b8ff
+- [x] 9.2 adversarial immutability tests — commit: 86a9831  **Phase 9 complete (release blocker green).**
 
 ### Phase 10 — Claude Code agent frontend
 - [ ] 10.1 lifeseek SKILL.md (staged loop; forbidden actions) — commit: ______
