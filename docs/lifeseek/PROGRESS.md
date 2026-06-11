@@ -43,7 +43,7 @@
 
 ### Phase 1 — Pattern model + dual simulators + differential harness  *(bedrock; gates Phase 2)*
 - [x] 1.1 (contract) Pattern + RLE io — commit: (this commit)
-- [ ] 1.2 ⟂A NumPy reference simulator (verifier path; no lifelib) — commit: ______
+- [x] 1.2 ⟂A NumPy reference simulator (verifier path; no lifelib) — commit: (this commit)
 - [ ] 1.3 ⟂B lifelib HashLife backend — commit: ______
 - [ ] 1.4 (integration) lifelib↔numpy differential harness **(green required to proceed)** — commit: ______
 
