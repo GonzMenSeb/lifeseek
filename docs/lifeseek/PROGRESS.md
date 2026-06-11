@@ -11,7 +11,7 @@
 ---
 
 ## ⮕ CURRENT POSITION
-**Phase 5 · Task 5.1 — append-only SQLite event log.** Phase 4 complete; novelty oracle done.
+**Phase 6 · Task 6.1 — EngineAdapter ABC (contract).** Phase 5 complete; store/provenance done.
 
 ## HANDOFF NOTE (rewrite before every stop)
 - **Just did:** Phase 4 complete — canonical apgcode + lifelib-free independent_canonical (4.1), catagolue
@@ -70,9 +70,9 @@
 - [x] 4.4 (integration) symmetry soundness suite — commit: (this commit)  **Phase 4 complete (release blocker green).**
 
 ### Phase 5 — Store, provenance, recipe, crash-safe resume
-- [ ] 5.1 append-only SQLite event log — commit: ______
-- [ ] 5.2 reproducible recipe object — commit: ______
-- [ ] 5.3 idempotent crash-safe resume — commit: ______
+- [x] 5.1 append-only SQLite event log — commit: a25b5b3
+- [x] 5.2 reproducible recipe object — commit: 9610efd
+- [x] 5.3 idempotent crash-safe resume — commit: 9d046c5  **Phase 5 complete.**
 
 ### Phase 6 — Sandbox + engine adapters
 - [ ] 6.1 (contract) EngineAdapter ABC — commit: ______
