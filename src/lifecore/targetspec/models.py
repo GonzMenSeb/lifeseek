@@ -40,6 +40,13 @@ class SlopeClass(StrEnum):
     OBLIQUE = "oblique"
 
 
+class OscillatorMechanism(StrEnum):
+    LOW_PERIOD_DIRECT = "low_period_direct"  # small p, direct search (rlifesrc/LLS)
+    HASSLER_CATALYST = "hassler_catalyst"  # assembly mechanisms (v1 stubs in capability map)
+    PERIOD_MULTIPLIER = "period_multiplier"
+    SIGNAL_LOOP_CONDUIT = "signal_loop_conduit"
+
+
 class TargetSpec(BaseModel):
     """Base target specification. Frozen + value-equal; identity is :attr:`spec_id`."""
 
@@ -156,3 +163,76 @@ class Spaceship(TargetSpec):
             "search_width": self.search_width,
             "slope": self.slope.value,
         }
+
+
+class Oscillator(TargetSpec):
+    """A pattern returning to its initial state after ``period`` gens (SPEC §4.1).
+
+    Split by **mechanism**: ``low_period_direct`` is the only directly searchable
+    family in v1; the assembly mechanisms are schema-present but route to
+    ``no-capable-engine`` via the capability map. ``bbox_max`` is an engine input
+    (the search box), not a post-hoc filter.
+    """
+
+    kind: SpecKind = SpecKind.OSCILLATOR
+    period: int
+    mechanism: OscillatorMechanism = OscillatorMechanism.LOW_PERIOD_DIRECT
+    bbox_max: tuple[int, int] | None = None
+    symmetry: SymmetryClass = SymmetryClass.ASYMMETRIC
+
+    @model_validator(mode="after")
+    def _validate(self) -> Oscillator:
+        if self.period < 2:
+            raise ValueError("oscillator period must be >= 2 (p=1 is a still life)")
+        return self
+
+    def engine_params(self) -> dict[str, Any]:
+        return {
+            "rule": self.rule,
+            "period": self.period,
+            "mechanism": self.mechanism.value,
+            "bbox_max": self.bbox_max,
+            "symmetry": self.symmetry.value,
+        }
+
+
+class StillLife(TargetSpec):
+    """A stable (period-1) pattern. ``population_range`` is a post-hoc filter."""
+
+    kind: SpecKind = SpecKind.STILL_LIFE
+    bbox_max: tuple[int, int] | None = None
+    population_range: tuple[int, int] | None = None  # post-hoc filter
+    symmetry: SymmetryClass = SymmetryClass.ASYMMETRIC
+
+    def engine_params(self) -> dict[str, Any]:
+        return {
+            "rule": self.rule,
+            "bbox_max": self.bbox_max,
+            "symmetry": self.symmetry.value,
+        }
+
+
+class _StubSpec(TargetSpec):
+    """Base for v1 schema-only stub types (construction toolkits are LATER, SPEC §4.1).
+
+    These are constructible so a campaign can be aimed at them, but the capability
+    map returns ``no-capable-engine`` rather than a false 'not found'.
+    """
+
+    bbox_max: tuple[int, int] | None = None
+
+
+class Gun(_StubSpec):
+    kind: SpecKind = SpecKind.GUN
+
+
+class Puffer(_StubSpec):
+    kind: SpecKind = SpecKind.PUFFER
+
+
+class Rake(_StubSpec):
+    kind: SpecKind = SpecKind.RAKE
+
+
+class Eater(_StubSpec):
+    kind: SpecKind = SpecKind.EATER

@@ -51,7 +51,7 @@
 ### Phase 2 — Target spec + capability map + hashing
 - [x] 2.1 (contract) base spec + hashing + YAML — commit: (this commit)
 - [x] 2.2 ⟂A spaceship spec (population/bbox = post-hoc, not engine input) — commit: (this commit)
-- [ ] 2.3 ⟂B oscillator (mechanism-split) + still-life + LATER stubs — commit: ______
+- [x] 2.3 ⟂B oscillator (mechanism-split) + still-life + LATER stubs — commit: (this commit)
 - [ ] 2.4 (integration) capability map (gun/oblique → no-capable-engine) — commit: ______
 
 ### Phase 3 — Verification gate (crown jewel)
